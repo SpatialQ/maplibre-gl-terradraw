@@ -1,8 +1,6 @@
 import type { ModeOptions } from '../interfaces/ModeOptions';
 import {
 	TerraDrawAngledRectangleMode,
-	TerraDrawCircleMode,
-	TerraDrawEllipseMode,
 	TerraDrawFreehandLineStringMode,
 	TerraDrawFreehandMode,
 	TerraDrawLineStringMode,
@@ -13,13 +11,15 @@ import {
 	TerraDrawRectangleMode,
 	TerraDrawRenderMode,
 	TerraDrawSectorMode,
-	TerraDrawSelectMode,
 	TerraDrawSensorMode,
 	ValidateNotSelfIntersecting,
 	type GeoJSONStoreFeatures
 } from 'terra-draw';
 import markerSvgUrl from '../../scss/icons/marker-blue.svg';
 import { TerraDrawTextMode } from '../modes/TerraDrawTextMode';
+import { TerraDrawShapeCircleMode } from '../modes/TerraDrawShapeCircleMode';
+import { TerraDrawShapeEllipseMode } from '../modes/TerraDrawShapeEllipseMode';
+import { TerraDrawShapeSelectMode } from '../modes/TerraDrawShapeSelectMode';
 
 /**
  * Validation function for polygon features to prevent self-intersecting polygons
@@ -66,13 +66,13 @@ export const getDefaultModeOptions = () => {
 		}),
 		rectangle: new TerraDrawRectangleMode(),
 		'angled-rectangle': new TerraDrawAngledRectangleMode(),
-		circle: new TerraDrawCircleMode(),
-		ellipse: new TerraDrawEllipseMode(),
+		circle: new TerraDrawShapeCircleMode(),
+		ellipse: new TerraDrawShapeEllipseMode(),
 		freehand: new TerraDrawFreehandMode(),
 		'freehand-linestring': new TerraDrawFreehandLineStringMode(),
 		sensor: new TerraDrawSensorMode(),
 		sector: new TerraDrawSectorMode(),
-		select: new TerraDrawSelectMode({
+		select: new TerraDrawShapeSelectMode({
 			flags: {
 				point: {
 					feature: {
@@ -145,44 +145,29 @@ export const getDefaultModeOptions = () => {
 				circle: {
 					feature: {
 						draggable: true,
-						coordinates: {
-							resizable: 'center-fixed',
-							deletable: false,
-							midpoints: false
-						}
+						rotateable: false,
+						scaleable: false
 					}
 				},
 				ellipse: {
 					feature: {
 						draggable: true,
-						rotateable: true,
-						coordinates: {
-							resizable: 'center',
-							deletable: false,
-							midpoints: false
-						}
+						rotateable: false,
+						scaleable: false
 					}
 				},
 				rectangle: {
 					feature: {
 						draggable: true,
-						rotateable: true,
-						coordinates: {
-							resizable: 'opposite',
-							deletable: false,
-							midpoints: false
-						}
+						rotateable: false,
+						scaleable: false
 					}
 				},
 				'angled-rectangle': {
 					feature: {
 						draggable: true,
-						rotateable: true,
-						coordinates: {
-							resizable: 'opposite',
-							deletable: false,
-							midpoints: false
-						}
+						rotateable: false,
+						scaleable: false
 					}
 				},
 				sensor: {

@@ -1,4 +1,5 @@
 import type { TerraDrawTextMode } from '../modes/TerraDrawTextMode';
+import type { TerraDrawShapeEllipseMode } from '../modes/TerraDrawShapeEllipseMode';
 import type { TerraDrawValhallaRoutingMode } from '../modes/TerraDrawValhallaRoutingMode';
 import type { TerraDrawValhallaTimeIsochroneMode } from '../modes/TerraDrawValhallaTimeIsochroneMode';
 import type { TerraDrawValhallaDistanceIsochroneMode } from '../modes/TerraDrawValhallaDistanceIsochroneMode';
@@ -39,6 +40,7 @@ export type TerradrawModeClass =
 	| TerraDrawSensorMode
 	| TerraDrawRenderMode
 	| TerraDrawSelectMode
+	| TerraDrawShapeEllipseMode
 	| TerraDrawTextMode
 	| TerraDrawValhallaRoutingMode
 	| TerraDrawValhallaTimeIsochroneMode
