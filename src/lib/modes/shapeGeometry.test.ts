@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	bearingDegrees,
+	destination,
 	distanceMeters,
 	handleCoordinates,
 	paramsFromFeature,
@@ -49,24 +50,60 @@ describe('parametric shapes', () => {
 		expect(Math.abs(bearingDegrees(center, xEnd as [number, number]) - 30)).toBeLessThan(0.05);
 	});
 
-	it('slides a rectangle side without moving the opposite side or the angle', () => {
+	it('rotates an ellipse rim and keeps the other axis', () => {
 		const params: ShapeParams = {
-			mode: 'angled-rectangle',
+			mode: 'ellipse',
 			center,
 			radiusMeters: 0,
-			xSemiAxis: 100,
-			ySemiAxis: 40,
-			angle: 40
+			xSemiAxis: 200,
+			ySemiAxis: 80,
+			angle: 30
 		};
-		const before = handleCoordinates(params);
-		const fixed = before[2] as [number, number];
-		const dragged = before[1] as [number, number];
-		const next = resizeShape(params, 'x', [dragged[0] + 0.002, dragged[1] + 0.001]);
-		const after = handleCoordinates(next);
-		expect(next.angle).toBe(40);
-		expect(distanceMeters(fixed, after[2] as [number, number])).toBeLessThan(0.05);
-		expect(next.xSemiAxis).toBeGreaterThan(params.xSemiAxis);
-		expect(next.ySemiAxis).toBe(params.ySemiAxis);
+		const xPointer = destination(center[0], center[1], 250, 70);
+		const turnedX = resizeShape(params, 'x', xPointer);
+		expect(turnedX.ySemiAxis).toBe(80);
+		expect(Math.abs(turnedX.xSemiAxis - 250)).toBeLessThan(0.05);
+		expect(Math.abs(turnedX.angle - 70)).toBeLessThan(0.05);
+		const yPointer = destination(center[0], center[1], 120, 10);
+		const turnedY = resizeShape(params, 'y', yPointer);
+		expect(turnedY.xSemiAxis).toBe(200);
+		expect(Math.abs(turnedY.ySemiAxis - 120)).toBeLessThan(0.05);
+		expect(Math.abs(((((turnedY.angle + 90) % 360) + 360) % 360) - 10)).toBeLessThan(0.05);
+	});
+
+	it('puts rectangle handles on the corners and keeps the opposite corner', () => {
+		for (const mode of ['rectangle', 'angled-rectangle'] as const) {
+			const params: ShapeParams = {
+				mode,
+				center,
+				radiusMeters: 0,
+				xSemiAxis: 100,
+				ySemiAxis: 40,
+				angle: mode === 'rectangle' ? 0 : 40
+			};
+			const ring = ringForParams(params, 64, 9);
+			const before = handleCoordinates(params);
+			expect(
+				distanceMeters(before[1] as [number, number], ring[2] as [number, number])
+			).toBeLessThan(0.05);
+			expect(
+				distanceMeters(before[2] as [number, number], ring[1] as [number, number])
+			).toBeLessThan(0.05);
+			expect(
+				distanceMeters(before[3] as [number, number], ring[3] as [number, number])
+			).toBeLessThan(0.05);
+			expect(
+				distanceMeters(before[4] as [number, number], ring[0] as [number, number])
+			).toBeLessThan(0.05);
+			const fixed = before[4] as [number, number];
+			const dragged = before[1] as [number, number];
+			const next = resizeShape(params, 'xy', [dragged[0] + 0.002, dragged[1] + 0.001]);
+			const after = handleCoordinates(next);
+			expect(next.angle).toBe(params.angle);
+			expect(distanceMeters(fixed, after[4] as [number, number])).toBeLessThan(0.05);
+			expect(next.xSemiAxis).not.toBe(params.xSemiAxis);
+			expect(next.ySemiAxis).not.toBe(params.ySemiAxis);
+		}
 	});
 
 	it('derives a north-up rectangle at angle 0', () => {

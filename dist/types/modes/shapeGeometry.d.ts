@@ -2,7 +2,7 @@ export declare const SHAPE_STEPS = 64;
 export declare const PARAMETRIC_MODES: readonly ["circle", "ellipse", "rectangle", "angled-rectangle"];
 export type ParametricMode = (typeof PARAMETRIC_MODES)[number];
 export type LngLat = [number, number];
-export type HandleRole = 'center' | 'rim' | 'x' | 'x-neg' | 'y' | 'y-neg';
+export type HandleRole = 'center' | 'rim' | 'x' | 'x-neg' | 'y' | 'y-neg' | 'xy' | 'xy-neg' | 'x-neg-y' | 'x-neg-y-neg';
 export type ShapeParams = {
     mode: ParametricMode;
     center: LngLat;

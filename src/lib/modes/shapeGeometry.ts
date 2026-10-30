@@ -13,7 +13,8 @@ export const PARAMETRIC_MODES = ['circle', 'ellipse', 'rectangle', 'angled-recta
 
 export type ParametricMode = (typeof PARAMETRIC_MODES)[number];
 export type LngLat = [number, number];
-export type HandleRole = 'center' | 'rim' | 'x' | 'x-neg' | 'y' | 'y-neg';
+export type HandleRole =
+	'center' | 'rim' | 'x' | 'x-neg' | 'y' | 'y-neg' | 'xy' | 'xy-neg' | 'x-neg-y' | 'x-neg-y-neg';
 
 export type ShapeParams = {
 	mode: ParametricMode;
@@ -219,7 +220,18 @@ export function ringForParams(params: ShapeParams, steps = SHAPE_STEPS, precisio
 
 export function handleRoles(mode: ParametricMode): HandleRole[] {
 	if (mode === 'circle') return ['center', 'rim', 'rim', 'rim', 'rim'];
+	if (mode === 'rectangle' || mode === 'angled-rectangle') {
+		return ['center', 'xy', 'xy-neg', 'x-neg-y', 'x-neg-y-neg'];
+	}
 	return ['center', 'x', 'x-neg', 'y', 'y-neg'];
+}
+
+function cornerSigns(role: HandleRole): { x: 1 | -1; y: 1 | -1 } | null {
+	if (role === 'xy') return { x: 1, y: 1 };
+	if (role === 'xy-neg') return { x: 1, y: -1 };
+	if (role === 'x-neg-y') return { x: -1, y: 1 };
+	if (role === 'x-neg-y-neg') return { x: -1, y: -1 };
+	return null;
 }
 
 export function handleCoordinates(params: ShapeParams): LngLat[] {
@@ -230,6 +242,16 @@ export function handleCoordinates(params: ShapeParams): LngLat[] {
 			destination(params.center[0], params.center[1], params.radiusMeters, 135),
 			destination(params.center[0], params.center[1], params.radiusMeters, 225),
 			destination(params.center[0], params.center[1], params.radiusMeters, 315)
+		];
+	}
+	if (params.mode === 'rectangle' || params.mode === 'angled-rectangle') {
+		const { center: origin, xSemiAxis, ySemiAxis, angle } = params;
+		return [
+			origin,
+			fromLocal(origin, xSemiAxis, ySemiAxis, angle),
+			fromLocal(origin, xSemiAxis, -ySemiAxis, angle),
+			fromLocal(origin, -xSemiAxis, ySemiAxis, angle),
+			fromLocal(origin, -xSemiAxis, -ySemiAxis, angle)
 		];
 	}
 	return [
@@ -339,8 +361,9 @@ export function shapeProperties(params: ShapeParams): Record<string, unknown> {
 }
 
 /**
- * Move one handle. Circle and ellipse keep their center. A rectangle side
- * keeps the opposite side where it is and slides along the stored angle.
+ * Move one handle. Circle and ellipse keep their center. An ellipse rim
+ * follows the pointer, so that axis turns and changes length while the other
+ * axis stays. A rectangle corner keeps the opposite corner and the stored angle.
  */
 export function resizeShape(
 	params: ShapeParams,
@@ -363,23 +386,46 @@ export function resizeShape(
 		return { ...params, radiusMeters, xSemiAxis: radiusMeters, ySemiAxis: radiusMeters };
 	}
 	const rectLike = params.mode === 'rectangle' || params.mode === 'angled-rectangle';
-	if (rectLike && (role === 'x' || role === 'x-neg' || role === 'y' || role === 'y-neg')) {
-		const horizontal = role === 'x' || role === 'x-neg';
-		const sign = role === 'x' || role === 'y' ? 1 : -1;
-		const fixed = horizontal
-			? fromLocal(params.center, -sign * params.xSemiAxis, 0, params.angle)
-			: fromLocal(params.center, 0, -sign * params.ySemiAxis, params.angle);
+	const signs = cornerSigns(role);
+	if (rectLike && signs) {
+		const fixed = fromLocal(
+			params.center,
+			-signs.x * params.xSemiAxis,
+			-signs.y * params.ySemiAxis,
+			params.angle
+		);
 		const local = toLocal(fixed, pointer, params.angle);
-		const along = horizontal ? local.x : local.y;
-		if (Math.abs(along) < MIN_METERS) return params;
+		const spanX = Math.abs(local.x) < MIN_METERS ? (local.x < 0 ? -1 : 1) * MIN_METERS : local.x;
+		const spanY = Math.abs(local.y) < MIN_METERS ? (local.y < 0 ? -1 : 1) * MIN_METERS : local.y;
 		const next = {
 			...params,
-			center: fromLocal(fixed, horizontal ? along / 2 : 0, horizontal ? 0 : along / 2, params.angle)
+			center: fromLocal(fixed, spanX / 2, spanY / 2, params.angle),
+			xSemiAxis: Math.abs(spanX) / 2,
+			ySemiAxis: Math.abs(spanY) / 2
 		};
-		if (horizontal) next.xSemiAxis = Math.abs(along) / 2;
-		else next.ySemiAxis = Math.abs(along) / 2;
 		if (next.mode === 'rectangle') next.angle = 0;
 		return next;
+	}
+	if (
+		params.mode === 'ellipse' &&
+		(role === 'x' || role === 'x-neg' || role === 'y' || role === 'y-neg')
+	) {
+		const distance = Math.max(MIN_METERS, distanceMeters(params.center, pointer));
+		const bearing = bearingDegrees(params.center, pointer);
+		const wrap = (degrees: number) => (degrees + 360) % 360;
+		if (role === 'x' || role === 'x-neg') {
+			return {
+				...params,
+				xSemiAxis: distance,
+				angle: wrap(role === 'x' ? bearing : bearing + 180)
+			};
+		}
+		// +y is 90° clockwise from the width axis.
+		return {
+			...params,
+			ySemiAxis: distance,
+			angle: wrap(role === 'y' ? bearing - 90 : bearing + 90)
+		};
 	}
 	const local = toLocal(params.center, pointer, params.angle);
 	const next = { ...params };
