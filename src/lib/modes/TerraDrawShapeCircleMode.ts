@@ -29,9 +29,12 @@ export class TerraDrawShapeCircleMode extends TerraDrawCircleMode {
 				}) => unknown;
 			};
 		};
-		if (typeof self.updateCircle !== 'function') return;
-		const baseUpdate = self.updateCircle.bind(this);
-		self.updateCircle = (endPosition, updateType) => {
+		const proto = TerraDrawCircleMode.prototype as unknown as Record<string, unknown>;
+		const updateCircle = proto['updateCircle'] as
+			((endPosition: [number, number], updateType: string) => unknown) | undefined;
+		if (typeof updateCircle !== 'function') return;
+		const baseUpdate = updateCircle.bind(this);
+		self['updateCircle'] = (endPosition: [number, number], updateType: string) => {
 			const center = self.center ? ([self.center[0], self.center[1]] as [number, number]) : null;
 			const updated = baseUpdate(endPosition, updateType);
 			const featureId = self.currentCircleId;

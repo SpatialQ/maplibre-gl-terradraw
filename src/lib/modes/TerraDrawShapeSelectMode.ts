@@ -74,15 +74,20 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 
 	constructor(options?: ConstructorParameters<typeof TerraDrawSelectMode>[0]) {
 		super(options);
-		const self = this as unknown as Host & {
-			select: (featureId: string | number, fromCursor?: boolean) => void;
-			deselect: (id: string | number) => void;
-			deleteSelected: () => void;
+		const proto = TerraDrawSelectMode.prototype as unknown as Record<string, unknown>;
+		if (typeof proto['select'] !== 'function') return;
+		const hook = (name: string) => {
+			const method = proto[name];
+			if (typeof method !== 'function') {
+				throw new Error(`TerraDrawSelectMode.${name} is missing`);
+			}
+			return (method as (...args: never[]) => void).bind(this);
 		};
-		const baseSelect = self.select.bind(this);
-		const baseDeselect = self.deselect.bind(this);
-		const baseDelete = self.deleteSelected.bind(this);
-		self.select = (featureId, fromCursor) => {
+		const baseSelect = hook('select') as (featureId: string | number, fromCursor?: boolean) => void;
+		const baseDeselect = hook('deselect') as (id: string | number) => void;
+		const baseDelete = hook('deleteSelected') as () => void;
+		const self = this as unknown as Host & Record<string, unknown>;
+		self['select'] = (featureId: string | number, fromCursor?: boolean) => {
 			const mode = this.modeOf(featureId);
 			const flags = mode ? self.flags?.[mode] : undefined;
 			const hadCoordinates = Boolean(
@@ -100,11 +105,11 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 			self.midPoints?.delete();
 			this.syncShapeHandles(featureId);
 		};
-		self.deselect = (id) => {
+		self['deselect'] = (id: string | number) => {
 			this.clearShapeHandles();
 			baseDeselect(id);
 		};
-		self.deleteSelected = () => {
+		self['deleteSelected'] = () => {
 			this.clearShapeHandles();
 			baseDelete();
 		};

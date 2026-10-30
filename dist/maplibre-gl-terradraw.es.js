@@ -8902,11 +8902,11 @@ var nr = class extends Fn.TerraDrawBaseAdapter {
 	start() {
 		if (super.start(), this.shapeWrapped) return;
 		this.shapeWrapped = !0;
-		let e = this;
-		if (typeof e.updateCircle != "function") return;
-		let t = e.updateCircle.bind(this);
-		e.updateCircle = (n, r) => {
-			let i = e.center ? [e.center[0], e.center[1]] : null, a = t(n, r), o = e.currentCircleId;
+		let e = this, t = Ae.prototype.updateCircle;
+		if (typeof t != "function") return;
+		let n = t.bind(this);
+		e.updateCircle = (t, r) => {
+			let i = e.center ? [e.center[0], e.center[1]] : null, a = n(t, r), o = e.currentCircleId;
 			return a && i && o != null && e.mutateFeature && e.mutateFeature.updatePolygon({
 				featureId: o,
 				propertyMutations: { center: i },
@@ -9290,20 +9290,26 @@ var { TerraDrawBaseDrawMode: Xr } = Fn, Zr = class extends Xr {
 	shapeDrag = null;
 	constructor(e) {
 		super(e);
-		let t = this, n = t.select.bind(this), r = t.deselect.bind(this), i = t.deleteSelected.bind(this);
-		t.select = (e, r) => {
-			let i = this.modeOf(e), a = i ? t.flags?.[i] : void 0, o = !!(a?.feature && Object.prototype.hasOwnProperty.call(a.feature, "coordinates")), s = a?.feature?.coordinates;
-			a?.feature && J(i) && delete a.feature.coordinates;
+		let t = Xt.prototype;
+		if (typeof t.select != "function") return;
+		let n = (e) => {
+			let n = t[e];
+			if (typeof n != "function") throw Error(`TerraDrawSelectMode.${e} is missing`);
+			return n.bind(this);
+		}, r = n("select"), i = n("deselect"), a = n("deleteSelected"), o = this;
+		o.select = (e, t) => {
+			let n = this.modeOf(e), i = n ? o.flags?.[n] : void 0, a = !!(i?.feature && Object.prototype.hasOwnProperty.call(i.feature, "coordinates")), s = i?.feature?.coordinates;
+			i?.feature && J(n) && delete i.feature.coordinates;
 			try {
-				n(e, r);
+				r(e, t);
 			} finally {
-				o && a?.feature && (a.feature.coordinates = s);
+				a && i?.feature && (i.feature.coordinates = s);
 			}
-			t.selected[0] === e && J(i) && (t.selectionPoints?.delete(), t.midPoints?.delete(), this.syncShapeHandles(e));
-		}, t.deselect = (e) => {
-			this.clearShapeHandles(), r(e);
-		}, t.deleteSelected = () => {
-			this.clearShapeHandles(), i();
+			o.selected[0] === e && J(n) && (o.selectionPoints?.delete(), o.midPoints?.delete(), this.syncShapeHandles(e));
+		}, o.deselect = (e) => {
+			this.clearShapeHandles(), i(e);
+		}, o.deleteSelected = () => {
+			this.clearShapeHandles(), a();
 		};
 	}
 	clearShapeHandles() {
