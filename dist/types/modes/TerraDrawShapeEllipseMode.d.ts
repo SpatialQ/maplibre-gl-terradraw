@@ -1,5 +1,4 @@
-import { TerraDrawExtend, type GeoJSONStoreFeatures, type TerraDrawAdapterStyling, type TerraDrawKeyboardEvent, type TerraDrawMouseEvent } from 'terra-draw';
-declare const TerraDrawBaseDrawMode: typeof TerraDrawExtend.TerraDrawBaseDrawMode;
+import { TerraDrawCircleMode, type GeoJSONStoreFeatures, type TerraDrawAdapterStyling, type TerraDrawKeyboardEvent, type TerraDrawMouseEvent } from 'terra-draw';
 type HexColor = `#${string}`;
 type HexColorStyling = HexColor | ((feature: GeoJSONStoreFeatures) => HexColor | undefined);
 type NumericStyling = number | ((feature: GeoJSONStoreFeatures) => number | undefined);
@@ -14,17 +13,25 @@ export type ShapeEllipseModeOptions = {
     styles?: Partial<ShapeEllipseStyling>;
     segments?: number;
 };
-export declare class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllipseStyling> {
+export declare class TerraDrawShapeEllipseMode extends TerraDrawCircleMode {
     mode: "ellipse";
     private phase;
-    private center;
+    private origin;
     private xSemiAxis;
     private ySemiAxis;
     private angle;
     private currentId;
-    private readonly segments;
+    private readonly steps;
     constructor(options?: ShapeEllipseModeOptions);
     styleFeature(feature: GeoJSONStoreFeatures): TerraDrawAdapterStyling;
+    onDragStart(): void;
+    onDrag(): void;
+    onDragEnd(): void;
+    afterFeatureAdded(): void;
+    afterFeatureUpdated(): void;
+    validateFeature(): {
+        valid: boolean;
+    };
     start(): void;
     stop(): void;
     cleanUp(): void;

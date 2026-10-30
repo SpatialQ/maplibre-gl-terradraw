@@ -1,5 +1,5 @@
 import {
-	TerraDrawExtend,
+	TerraDrawCircleMode,
 	type GeoJSONStoreFeatures,
 	type TerraDrawAdapterStyling,
 	type TerraDrawKeyboardEvent,
@@ -13,8 +13,6 @@ import {
 	toLocal,
 	type ShapeParams
 } from './shapeGeometry';
-
-const { TerraDrawBaseDrawMode } = TerraDrawExtend;
 
 type HexColor = `#${string}`;
 type HexColorStyling = HexColor | ((feature: GeoJSONStoreFeatures) => HexColor | undefined);
@@ -40,20 +38,25 @@ type DrawPhase = 'idle' | 'axis' | 'depth';
  * Three-click ellipse: center, end of the first axis (length and bearing),
  * then the other axis. Angle is the map bearing of the first axis.
  */
-export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllipseStyling> {
+export class TerraDrawShapeEllipseMode extends TerraDrawCircleMode {
 	mode = 'ellipse' as const;
 	private phase: DrawPhase = 'idle';
-	private center: [number, number] | null = null;
+	private origin: [number, number] | null = null;
 	private xSemiAxis = 0;
 	private ySemiAxis = 0;
 	private angle = 0;
 	private currentId: string | number | null = null;
-	private readonly segments: number;
+	private readonly steps: number;
 
 	constructor(options?: ShapeEllipseModeOptions) {
-		super({ styles: options?.styles ?? {} });
 		const steps = Math.trunc(options?.segments ?? SHAPE_STEPS);
-		this.segments = steps >= 8 ? steps : SHAPE_STEPS;
+		super({
+			styles: (options?.styles ?? {}) as NonNullable<
+				ConstructorParameters<typeof TerraDrawCircleMode>[0]
+			>['styles'],
+			segments: steps >= 8 ? steps : SHAPE_STEPS
+		});
+		this.steps = steps >= 8 ? steps : SHAPE_STEPS;
 	}
 
 	/** @internal */
@@ -76,6 +79,26 @@ export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllips
 			lineStringWidth: 0,
 			zIndex: 0
 		};
+	}
+
+	/** Circle drag must not run; the ellipse is three clicks. */
+	onDragStart() {}
+
+	/** @internal */
+	onDrag() {}
+
+	/** @internal */
+	onDragEnd() {}
+
+	/** @internal */
+	afterFeatureAdded() {}
+
+	/** @internal */
+	afterFeatureUpdated() {}
+
+	/** @internal */
+	validateFeature(): { valid: boolean } {
+		return { valid: true };
 	}
 
 	/** @internal */
@@ -105,8 +128,8 @@ export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllips
 	onClick(event: TerraDrawMouseEvent) {
 		if (event.button !== 'left') return;
 		const point: [number, number] = [event.lng, event.lat];
-		if (this.phase === 'idle' || !this.center) {
-			this.center = point;
+		if (this.phase === 'idle' || !this.origin) {
+			this.origin = point;
 			this.xSemiAxis = 1;
 			this.ySemiAxis = 1;
 			this.angle = 0;
@@ -116,11 +139,11 @@ export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllips
 			return;
 		}
 		if (this.phase === 'axis') {
-			const length = distanceMeters(this.center, point);
+			const length = distanceMeters(this.origin, point);
 			if (length < 1) return;
 			this.xSemiAxis = length;
 			this.ySemiAxis = length;
-			this.angle = bearingDegrees(this.center, point);
+			this.angle = bearingDegrees(this.origin, point);
 			this.phase = 'depth';
 			this.write('commit', true);
 			return;
@@ -130,7 +153,7 @@ export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllips
 		const featureId = this.currentId;
 		this.write('finish', false);
 		this.phase = 'idle';
-		this.center = null;
+		this.origin = null;
 		this.currentId = null;
 		this.setStarted();
 		if (featureId != null) {
@@ -140,14 +163,14 @@ export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllips
 
 	/** @internal */
 	onMouseMove(event: TerraDrawMouseEvent) {
-		if (!this.center || this.phase === 'idle') return;
+		if (!this.origin || this.phase === 'idle') return;
 		const point: [number, number] = [event.lng, event.lat];
 		if (this.phase === 'axis') {
-			const length = distanceMeters(this.center, point);
+			const length = distanceMeters(this.origin, point);
 			if (length < 1) return;
 			this.xSemiAxis = length;
 			this.ySemiAxis = length;
-			this.angle = bearingDegrees(this.center, point);
+			this.angle = bearingDegrees(this.origin, point);
 		} else {
 			this.captureDepth(point);
 		}
@@ -155,16 +178,16 @@ export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllips
 	}
 
 	private captureDepth(point: [number, number]) {
-		if (!this.center) return;
-		const local = toLocal(this.center, point, this.angle);
+		if (!this.origin) return;
+		const local = toLocal(this.origin, point, this.angle);
 		this.ySemiAxis = Math.max(1, Math.abs(local.y));
 	}
 
 	private params(): ShapeParams | null {
-		if (!this.center) return null;
+		if (!this.origin) return null;
 		return {
 			mode: 'ellipse',
-			center: this.center,
+			center: this.origin,
 			radiusMeters: 0,
 			xSemiAxis: this.xSemiAxis,
 			ySemiAxis: this.ySemiAxis,
@@ -191,7 +214,7 @@ export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllips
 		};
 		if (!params || !host.mutateFeature) return;
 		const precision = host.coordinatePrecision ?? 9;
-		const ring = ringForParams(params, this.segments, precision);
+		const ring = ringForParams(params, this.steps, precision);
 		const properties = {
 			mode: this.mode,
 			center: params.center,
@@ -223,7 +246,7 @@ export class TerraDrawShapeEllipseMode extends TerraDrawBaseDrawMode<ShapeEllips
 		};
 		if (this.currentId != null) host.mutateFeature?.deleteFeaturesIfPresent([this.currentId]);
 		this.currentId = null;
-		this.center = null;
+		this.origin = null;
 		this.phase = 'idle';
 		if (this.state === 'drawing') this.setStarted();
 	}
