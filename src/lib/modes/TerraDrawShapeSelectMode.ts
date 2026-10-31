@@ -1,5 +1,6 @@
 import { TerraDrawSelectMode, type TerraDrawMouseEvent } from 'terra-draw';
 import {
+	destination,
 	handleCoordinates,
 	handleRoles,
 	isParametricMode,
@@ -62,8 +63,10 @@ type ShapeDrag = {
 };
 
 /**
- * Select mode that edits circles, ellipses, and both rectangle tools from
- * their center, size, and angle. Other modes keep the standard vertex handles.
+ * Select mode that edits circles, ellipses, rectangles, sectors, and sensors
+ * from their center, size, and angle. Other modes keep the standard vertex
+ * handles. Parametric modes without stored params (legacy sensors) also fall
+ * back to vertex handles.
  */
 export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 	private shapeHandles: { featureId: string | number | null; ids: Array<string | number> } = {
@@ -94,13 +97,14 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 				flags?.feature && Object.prototype.hasOwnProperty.call(flags.feature, 'coordinates')
 			);
 			const coordinates = flags?.feature?.coordinates;
-			if (flags?.feature && isParametricMode(mode)) delete flags.feature.coordinates;
+			const useShapeHandles = this.usesShapeHandles(featureId);
+			if (flags?.feature && useShapeHandles) delete flags.feature.coordinates;
 			try {
 				baseSelect(featureId, fromCursor);
 			} finally {
 				if (hadCoordinates && flags?.feature) flags.feature.coordinates = coordinates;
 			}
-			if (self.selected[0] !== featureId || !isParametricMode(mode)) return;
+			if (self.selected[0] !== featureId || !useShapeHandles) return;
 			self.selectionPoints?.delete();
 			self.midPoints?.delete();
 			this.syncShapeHandles(featureId);
@@ -115,7 +119,7 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 		};
 	}
 
-	/** Drop the five shape handles, if they are still in the store. */
+	/** Drop the shape handles, if they are still in the store. */
 	clearShapeHandles() {
 		this.shapeDrag = null;
 		this.deleteShapeHandles();
@@ -130,9 +134,9 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 	/** @internal */
 	afterFeatureUpdated(feature: { id?: string | number; properties?: { mode?: unknown } }) {
 		if (
-			isParametricMode(feature?.properties?.mode) &&
 			feature.id != null &&
-			feature.id === this.host().selected?.[0]
+			feature.id === this.host().selected?.[0] &&
+			this.usesShapeHandles(feature.id)
 		) {
 			if (!this.shapeDrag) this.syncShapeHandles(feature.id);
 			return;
@@ -144,7 +148,7 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 	onDragStart(event: TerraDrawMouseEvent, setMapDraggability: (enabled: boolean) => void) {
 		const host = this.host();
 		const selectedId = host.selected?.[0];
-		if (selectedId == null || !isParametricMode(this.modeOf(selectedId))) {
+		if (selectedId == null || !this.usesShapeHandles(selectedId)) {
 			super.onDragStart(event, setMapDraggability);
 			return;
 		}
@@ -175,7 +179,7 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 	onDrag(event: TerraDrawMouseEvent, setMapDraggability: (enabled: boolean) => void) {
 		const host = this.host();
 		const selectedId = host.selected?.[0];
-		if (selectedId == null || !isParametricMode(this.modeOf(selectedId))) {
+		if (selectedId == null || !this.usesShapeHandles(selectedId)) {
 			super.onDrag(event, setMapDraggability);
 			return;
 		}
@@ -203,7 +207,7 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 	onDragEnd(event: TerraDrawMouseEvent, setMapDraggability: (enabled: boolean) => void) {
 		const host = this.host();
 		const selectedId = host.selected?.[0];
-		if (selectedId == null || !isParametricMode(this.modeOf(selectedId))) {
+		if (selectedId == null || !this.usesShapeHandles(selectedId)) {
 			super.onDragEnd(event, setMapDraggability);
 			return;
 		}
@@ -230,7 +234,7 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 	onMouseMove(event: TerraDrawMouseEvent) {
 		const host = this.host();
 		const selectedId = host.selected?.[0];
-		if (selectedId == null || !isParametricMode(this.modeOf(selectedId))) {
+		if (selectedId == null || !this.usesShapeHandles(selectedId)) {
 			super.onMouseMove(event);
 			return;
 		}
@@ -254,6 +258,11 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 		return typeof mode === 'string' ? mode : undefined;
 	}
 
+	private usesShapeHandles(featureId: string | number) {
+		const mode = this.modeOf(featureId);
+		return isParametricMode(mode) && this.paramsOf(featureId) != null;
+	}
+
 	private featureOf(featureId: string | number) {
 		const host = this.host();
 		if (!host.readFeature) return null;
@@ -274,6 +283,25 @@ export class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
 			ring[0][0] === ring[ring.length - 1][0] && ring[0][1] === ring[ring.length - 1][1]
 				? ring.slice(0, -1)
 				: ring;
+		if (!open.length) return params;
+		if (params.mode === 'sector') {
+			return { ...params, center: [open[0][0], open[0][1]] };
+		}
+		if (params.mode === 'sensor') {
+			const expected = destination(
+				params.center[0],
+				params.center[1],
+				params.radiusMeters,
+				params.startBearing
+			);
+			return {
+				...params,
+				center: [
+					params.center[0] + (open[0][0] - expected[0]),
+					params.center[1] + (open[0][1] - expected[1])
+				]
+			};
+		}
 		let lon = 0;
 		let lat = 0;
 		for (const point of open) {

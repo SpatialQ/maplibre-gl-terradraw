@@ -10,8 +10,6 @@ import {
 	TerraDrawPolyLineMode,
 	TerraDrawRectangleMode,
 	TerraDrawRenderMode,
-	TerraDrawSectorMode,
-	TerraDrawSensorMode,
 	ValidateNotSelfIntersecting,
 	type GeoJSONStoreFeatures
 } from 'terra-draw';
@@ -19,6 +17,8 @@ import markerSvgUrl from '../../scss/icons/marker-blue.svg';
 import { TerraDrawTextMode } from '../modes/TerraDrawTextMode';
 import { TerraDrawShapeCircleMode } from '../modes/TerraDrawShapeCircleMode';
 import { TerraDrawShapeEllipseMode } from '../modes/TerraDrawShapeEllipseMode';
+import { TerraDrawShapeSectorMode } from '../modes/TerraDrawShapeSectorMode';
+import { TerraDrawShapeSensorMode } from '../modes/TerraDrawShapeSensorMode';
 import { TerraDrawShapeSelectMode } from '../modes/TerraDrawShapeSelectMode';
 
 /**
@@ -70,8 +70,8 @@ export const getDefaultModeOptions = () => {
 		ellipse: new TerraDrawShapeEllipseMode(),
 		freehand: new TerraDrawFreehandMode(),
 		'freehand-linestring': new TerraDrawFreehandLineStringMode(),
-		sensor: new TerraDrawSensorMode(),
-		sector: new TerraDrawSectorMode(),
+		sensor: new TerraDrawShapeSensorMode(),
+		sector: new TerraDrawShapeSectorMode(),
 		select: new TerraDrawShapeSelectMode({
 			flags: {
 				point: {
@@ -173,8 +173,8 @@ export const getDefaultModeOptions = () => {
 				sensor: {
 					feature: {
 						draggable: true,
-						rotateable: true,
-						scaleable: true,
+						rotateable: false,
+						scaleable: false,
 						coordinates: {
 							midpoints: true,
 							draggable: true,
@@ -185,8 +185,8 @@ export const getDefaultModeOptions = () => {
 				sector: {
 					feature: {
 						draggable: true,
-						rotateable: true,
-						scaleable: true,
+						rotateable: false,
+						scaleable: false,
 						coordinates: {
 							midpoints: true,
 							draggable: true,

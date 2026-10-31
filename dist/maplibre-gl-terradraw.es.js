@@ -42,18 +42,18 @@ function m(e) {
 		return typeof e == "number" && !isNaN(new Date(e).valueOf());
 	}(e);
 }
-var h = "Feature mode property does not match the mode being added to", g = (e) => typeof e == "number" && e >= 0 && Number.isFinite(e), _ = (e) => typeof e == "boolean", v = (e) => e === null, y = (e) => typeof e == "object" && !!e, b = (e) => typeof e == "string" && e.length > 0, x = (e) => e === "click-move" || e === "click-drag" || e === "click-move-or-drag", S;
+var h = "Feature mode property does not match the mode being added to", g = (e) => typeof e == "number" && e >= 0 && Number.isFinite(e), _ = (e) => typeof e == "boolean", v = (e) => e === null, y = (e) => typeof e == "object" && !!e, b = (e) => typeof e == "string" && e.length > 0, x = (e) => e === "click-move" || e === "click-drag" || e === "click-move-or-drag", ee;
 (function(e) {
 	e.Drawing = "drawing", e.Select = "select", e.Static = "static", e.Render = "render";
-})(S ||= {});
-var ee = {
+})(ee ||= {});
+var te = {
 	rightClick: !0,
 	contextMenu: !1,
 	leftClick: !0,
 	onDragStart: !0,
 	onDrag: !0,
 	onDragEnd: !0
-}, C = class {
+}, S = class {
 	get state() {
 		return this._state;
 	}
@@ -69,7 +69,7 @@ var ee = {
 	}
 	registerBehaviors(e) {}
 	constructor(e, n = !1) {
-		this._state = "unregistered", this._styles = {}, this.pointerEvents = ee, this.behaviors = [], this.validate = void 0, this.pointerDistance = 40, this.coordinatePrecision = void 0, this.undoRedoMaxStackSize = void 0, this.onStyleChange = void 0, this.store = void 0, this.projection = "web-mercator", this.setDoubleClickToZoom = void 0, this.unproject = void 0, this.project = void 0, this.setCursor = void 0, this.isInitialUpdate = !1, this.type = S.Drawing, this.mode = "base", n ? this.isInitialUpdate = !0 : this.updateOptions(t({}, e));
+		this._state = "unregistered", this._styles = {}, this.pointerEvents = te, this.behaviors = [], this.validate = void 0, this.pointerDistance = 40, this.coordinatePrecision = void 0, this.undoRedoMaxStackSize = void 0, this.onStyleChange = void 0, this.store = void 0, this.projection = "web-mercator", this.setDoubleClickToZoom = void 0, this.unproject = void 0, this.project = void 0, this.setCursor = void 0, this.isInitialUpdate = !1, this.type = ee.Drawing, this.mode = "base", n ? this.isInitialUpdate = !0 : this.updateOptions(t({}, e));
 	}
 	updateOptions(e) {
 		y(e?.styles) && (this.styles = t({}, this._styles, e.styles)), g(e?.pointerDistance) && (this.pointerDistance = e.pointerDistance), typeof e?.validation == "function" && (this.validate = e.validation), b(e?.projection) && (this.projection = e.projection), y(e?.pointerEvents) && (this.pointerEvents = e.pointerEvents), b(e?.modeName) && !0 === this.isInitialUpdate && (this.mode = e.modeName), this.isInitialUpdate = !1;
@@ -201,23 +201,23 @@ var ee = {
 		return e === void 0 ? t : typeof e == "function" ? (r = e(n)) ?? t : e;
 		var r;
 	}
-}, te = class extends C {
+}, ne = class extends S {
 	constructor(...e) {
-		super(...e), this.type = S.Select;
+		super(...e), this.type = ee.Select;
 	}
-}, w = "Enter", T = "Escape", E = "crosshair", ne = "pointer", re = "grabbing", ie = "move", D = "unset";
-function O(e, t) {
+}, C = "Enter", w = "Escape", T = "crosshair", re = "pointer", ie = "grabbing", ae = "move", E = "unset";
+function D(e, t) {
 	let n = (e) => e * Math.PI / 180, r = n(e[1]), i = n(e[0]), a = n(t[1]), o = a - r, s = n(t[0]) - i, c = Math.sin(o / 2) * Math.sin(o / 2) + Math.cos(r) * Math.cos(a) * Math.sin(s / 2) * Math.sin(s / 2);
 	return 2 * Math.atan2(Math.sqrt(c), Math.sqrt(1 - c)) * 6371e3 / 1e3;
 }
-var ae = 6371008.8;
-function k(e) {
+var oe = 6371008.8;
+function O(e) {
 	return e % 360 * Math.PI / 180;
 }
-function oe(e) {
+function se(e) {
 	return e / 6371.0088;
 }
-function se(e) {
+function k(e) {
 	return e % (2 * Math.PI) * 180 / Math.PI;
 }
 function A(e, t = 9) {
@@ -232,8 +232,8 @@ var ce = 57.29577951308232, le = .017453292519943295, ue = 6378137, j = (e, t) =
 	lat: t === 0 ? 0 : (2 * Math.atan(Math.exp(t / ue)) - Math.PI / 2) * ce
 });
 function de(e, t, n) {
-	let r = k(e[0]), i = k(e[1]), a = k(n), o = oe(t), s = Math.asin(Math.sin(i) * Math.cos(o) + Math.cos(i) * Math.sin(o) * Math.cos(a));
-	return [se(r + Math.atan2(Math.sin(a) * Math.sin(o) * Math.cos(i), Math.cos(o) - Math.sin(i) * Math.sin(s))), se(s)];
+	let r = O(e[0]), i = O(e[1]), a = O(n), o = se(t), s = Math.asin(Math.sin(i) * Math.cos(o) + Math.cos(i) * Math.sin(o) * Math.cos(a));
+	return [k(r + Math.atan2(Math.sin(a) * Math.sin(o) * Math.cos(i), Math.cos(o) - Math.sin(i) * Math.sin(s))), k(s)];
 }
 function fe(e) {
 	let { center: t, radiusKilometers: n, coordinatePrecision: r } = e, i = e.steps ? e.steps : 64, a = [];
@@ -753,9 +753,9 @@ var ke = (e) => Oe(e) ? e[0].slice(0, -1) : e, Ae = (e) => Oe(e) ? e[0] : e, z =
 		this.mutateFeature.deleteFeaturesIfPresent(t);
 	}
 }, je = {
-	cancel: T,
-	finish: w
-}, Me = { start: E }, Ne = class extends C {
+	cancel: w,
+	finish: C
+}, Me = { start: T }, Ne = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "circle", this.center = void 0, this.endPosition = void 0, this.segments = 64, this.currentCircleId = void 0, this.keyEvents = je, this.cursors = Me, this.startingRadiusKilometers = 1e-5, this.cursorMovedAfterInitialCursorDown = !1, this.drawInteraction = "click-move", this.drawType = void 0, this.cancelled = !1, this.minimumSegments = 3, this.showCoordinatePoints = !1, this.readFeature = void 0, this.coordinatePoints = void 0, this.mutateFeature = void 0, this.updateOptions(e);
 	}
@@ -807,7 +807,7 @@ var ke = (e) => Oe(e) ? e[0].slice(0, -1) : e, Ae = (e) => Oe(e) ? e[0] : e, z =
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onClick(e) {
 		this.moveDrawAllowed() && (e.button === "right" && this.allowPointerEvent(this.pointerEvents.rightClick, e) || e.button === "left" && this.allowPointerEvent(this.pointerEvents.leftClick, e) || e.isContextMenu && this.allowPointerEvent(this.pointerEvents.contextMenu, e)) && (this.center ? this.center && this.currentCircleId !== void 0 && (this.endPosition = [e.lng, e.lat], this.close()) : this.beginDrawing(e));
@@ -864,9 +864,9 @@ var ke = (e) => Oe(e) ? e[0].slice(0, -1) : e, Ae = (e) => Oe(e) ? e[0] : e, z =
 		if (this.currentCircleId === void 0 || this.center === void 0) return;
 		let r = t === o.Finish, i, a;
 		if (this.cursorMovedAfterInitialCursorDown) {
-			if (a = O(this.center, e), this.projection === "web-mercator") {
+			if (a = D(this.center, e), this.projection === "web-mercator") {
 				let t = function(e, t) {
-					let n = 1e3 * O(e, t);
+					let n = 1e3 * D(e, t);
 					if (n === 0) return 1;
 					let { x: r, y: i } = j(e[0], e[1]), { x: a, y: o } = j(t[0], t[1]);
 					return Math.sqrt((a - r) ** 2 + (o - i) ** 2) / n;
@@ -937,11 +937,11 @@ var ke = (e) => Oe(e) ? e[0].slice(0, -1) : e, Ae = (e) => Oe(e) ? e[0] : e, z =
 	}
 };
 function Pe(e, t, n) {
-	let r = k(e[0]), i = k(e[1]), a = k(n), o = oe(t), s = Math.asin(Math.sin(i) * Math.cos(o) + Math.cos(i) * Math.sin(o) * Math.cos(a));
-	return [se(r + Math.atan2(Math.sin(a) * Math.sin(o) * Math.cos(i), Math.cos(o) - Math.sin(i) * Math.sin(s))), se(s)];
+	let r = O(e[0]), i = O(e[1]), a = O(n), o = se(t), s = Math.asin(Math.sin(i) * Math.cos(o) + Math.cos(i) * Math.sin(o) * Math.cos(a));
+	return [k(r + Math.atan2(Math.sin(a) * Math.sin(o) * Math.cos(i), Math.cos(o) - Math.sin(i) * Math.sin(s))), k(s)];
 }
 function Fe({ x: e, y: t }, n, r) {
-	let i = k(r);
+	let i = O(r);
 	return {
 		x: e + n * Math.cos(i),
 		y: t + n * Math.sin(i)
@@ -983,7 +983,7 @@ function Re(e) {
 var ze = {
 	cancel: "Escape",
 	finish: "Enter"
-}, Be = { start: "crosshair" }, Ve = class extends C {
+}, Be = { start: "crosshair" }, Ve = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "ellipse", this.center = void 0, this.endPosition = void 0, this.segments = 64, this.currentEllipseId = void 0, this.keyEvents = ze, this.cursors = Be, this.startingRadiusKilometers = 1e-5, this.cursorMovedAfterInitialCursorDown = !1, this.drawInteraction = "click-move", this.drawType = void 0, this.minimumSegments = 3, this.showCoordinatePoints = !1, this.cancelled = !1, this.readFeature = void 0, this.coordinatePoints = void 0, this.mutateFeature = void 0, this.updateOptions(e);
 	}
@@ -1122,7 +1122,7 @@ var ze = {
 				});
 			} else {
 				if (this.projection !== "globe") throw Error("Invalid projection");
-				a = O(this.center, [e[0], this.center[1]]), s = O(this.center, [this.center[0], e[1]]), i = Le({
+				a = D(this.center, [e[0], this.center[1]]), s = D(this.center, [this.center[0], e[1]]), i = Le({
 					center: this.center,
 					xRadiusKilometers: a,
 					yRadiusKilometers: s,
@@ -1169,12 +1169,12 @@ var ze = {
 	let { x: n, y: r } = e, { x: i, y: a } = t, o = i - n, s = a - r;
 	return Math.sqrt(s * s + o * o);
 }, He = {
-	cancel: T,
-	finish: w
+	cancel: w,
+	finish: C
 }, Ue = {
-	start: E,
-	close: ne
-}, We = class extends C {
+	start: T,
+	close: re
+}, We = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "freehand", this.canClose = !1, this.currentId = void 0, this.closingPointId = void 0, this.minDistance = 20, this.keyEvents = He, this.cursors = Ue, this.preventPointsNearClose = !0, this.autoClose = !1, this.autoCloseTimeout = 500, this.hasLeftStartingPoint = !1, this.preventNewFeature = !1, this.drawInteraction = "click-move", this.drawType = void 0, this.smoothing = 0, this.showCoordinatePoints = !1, this.coordinatePoints = void 0, this.mutateFeature = void 0, this.readFeature = void 0, this.updateOptions(e);
 	}
@@ -1278,7 +1278,7 @@ var ze = {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onMouseMove(e) {
 		this.moveDrawAllowed() && this.drawType === "click" && this.addCoordinate(e);
@@ -1434,8 +1434,8 @@ var Ke = class extends N {
 	}
 };
 function Ye(e, t) {
-	let n = k(e[0]), r = k(t[0]), i = k(e[1]), a = k(t[1]), o = Math.sin(r - n) * Math.cos(a), s = Math.cos(i) * Math.sin(a) - Math.sin(i) * Math.cos(a) * Math.cos(r - n);
-	return se(Math.atan2(o, s));
+	let n = O(e[0]), r = O(t[0]), i = O(e[1]), a = O(t[1]), o = Math.sin(r - n) * Math.cos(a), s = Math.cos(i) * Math.sin(a) - Math.sin(i) * Math.cos(a) * Math.cos(r - n);
+	return k(Math.atan2(o, s));
 }
 function V({ x: e, y: t }, { x: n, y: r }) {
 	let i = n - e, a = r - t;
@@ -1455,7 +1455,7 @@ function Xe(e, t, n) {
 		}
 		if (c >= n) return a = n - c, a ? (o = Ye(e[i], e[i - 1]) - 180, s = Pe(e[i], a, o), r.push(s), r) : (r.push(e[i]), r);
 		if (c >= t && r.push(e[i]), i === e.length - 1) return r;
-		c += O(e[i], e[i + 1]);
+		c += D(e[i], e[i + 1]);
 	}
 	if (c < t && e.length === i) throw Error("Start position is beyond line");
 	let l = e[e.length - 1];
@@ -1473,7 +1473,7 @@ var $e = class extends N {
 	}
 	generateInsertionCoordinates(e, t, n) {
 		let r = [e, t], i = 0;
-		for (let e = 0; e < r.length - 1; e++) i += O(r[0], r[1]);
+		for (let e = 0; e < r.length - 1; e++) i += D(r[0], r[1]);
 		if (i <= n) return r;
 		let a = i / n - 1;
 		Number.isInteger(a) || (a = Math.floor(a) + 1);
@@ -1487,7 +1487,7 @@ var $e = class extends N {
 		return this.limitCoordinates(s);
 	}
 	generateInsertionGeodesicCoordinates(e, t, n) {
-		let r = O(e, t), i = function(e, t, n) {
+		let r = D(e, t), i = function(e, t, n) {
 			let r = [], i = Ze(e[1]), a = Ze(e[0]), o = Ze(t[1]), s = Ze(t[0]);
 			n += 1;
 			let c = 2 * Math.asin(Math.sqrt(Math.sin((o - i) / 2) ** 2 + Math.cos(i) * Math.cos(o) * Math.sin((s - a) / 2) ** 2));
@@ -1538,7 +1538,7 @@ function nt(e, t) {
 	return Math.acos(Math.min(Math.max(n, -1), 1));
 }
 function rt(e) {
-	let t = k(e[1]), n = k(e[0]);
+	let t = O(e[1]), n = O(e[0]);
 	return [
 		Math.cos(t) * Math.cos(n),
 		Math.cos(t) * Math.sin(n),
@@ -1546,8 +1546,8 @@ function rt(e) {
 	];
 }
 function it(e) {
-	let [t, n, r] = e, i = se(Math.asin(r));
-	return [se(Math.atan2(n, t)), i];
+	let [t, n, r] = e, i = k(Math.asin(r));
+	return [k(Math.atan2(n, t)), i];
 }
 function at(e, t, n) {
 	let r = rt(e), i = rt(t), [a, o, s] = rt(n), [c, l, u] = function(e, t) {
@@ -1565,8 +1565,8 @@ function at(e, t, n) {
 		-1 * m * _,
 		-1 * h * _,
 		-1 * g * _
-	], b = nt(r, i), x = nt(r, v), S = nt(i, v), ee = nt(r, y), C = nt(i, y), te;
-	return te = x < ee && x < C || S < ee && S < C ? v : y, nt(r, te) > b || nt(i, te) > b ? O(it(te), it(r)) <= O(it(te), it(i)) ? [
+	], b = nt(r, i), x = nt(r, v), ee = nt(i, v), te = nt(r, y), S = nt(i, y), ne;
+	return ne = x < te && x < S || ee < te && ee < S ? v : y, nt(r, ne) > b || nt(i, ne) > b ? D(it(ne), it(r)) <= D(it(ne), it(i)) ? [
 		it(r),
 		!0,
 		!1
@@ -1575,7 +1575,7 @@ function at(e, t, n) {
 		!1,
 		!0
 	] : [
-		it(te),
+		it(ne),
 		!1,
 		!1
 	];
@@ -1633,7 +1633,7 @@ var st = class extends N {
 					let n = [Infinity, Infinity], r = Infinity, i = 0;
 					for (let a of t) {
 						let o = a[0], s = a[1], c, l = Infinity;
-						o[0] === e[0] && o[1] === e[1] ? c = o : s[0] === e[0] && s[1] === e[1] ? c = s : [c] = at(o, s, e), c && (l = O(e, c), l < r && (n = c, r = l, i = t.indexOf(a)));
+						o[0] === e[0] && o[1] === e[1] ? c = o : s[0] === e[0] && s[1] === e[1] ? c = s : [c] = at(o, s, e), c && (l = D(e, c), l < r && (n = c, r = l, i = t.indexOf(a)));
 					}
 					return r === Infinity ? void 0 : {
 						coordinate: n,
@@ -1820,11 +1820,11 @@ var st = class extends N {
 		return [u.lng, u.lat];
 	}
 	snapOnGlobe(e, t, n, r, i) {
-		let a = Ye(t, e) + 180, o = Ye(t, n), s = O(t, n), c, l = Infinity;
+		let a = Ye(t, e) + 180, o = Ye(t, n), s = D(t, n), c, l = Infinity;
 		for (let e of this.offsets(r, i)) {
 			let r = a + e, i = this.angleDifference(o, r), u = s * Math.cos(i * Math.PI / 180);
 			if (u <= this.EPSILON) continue;
-			let d = Pe(t, u, r), f = O(n, d);
+			let d = Pe(t, u, r), f = D(n, d);
 			f < l && (c = d, l = f);
 		}
 		return c;
@@ -1880,7 +1880,7 @@ var st = class extends N {
 	}
 	toLocalPoint(e, t) {
 		if (this.projection === "web-mercator") return j(e[0], e[1]);
-		let n = O(t, e), r = Ye(t, e) * Math.PI / 180;
+		let n = D(t, e), r = Ye(t, e) * Math.PI / 180;
 		return {
 			x: n * Math.sin(r),
 			y: n * Math.cos(r)
@@ -1907,14 +1907,14 @@ var st = class extends N {
 		return (e - t + 540) % 360 - 180;
 	}
 }, ft = {
-	cancel: T,
-	finish: w
+	cancel: w,
+	finish: C
 }, pt = {
-	start: E,
-	close: ne,
-	dragStart: re,
-	dragEnd: E
-}, mt = class extends C {
+	start: T,
+	close: re,
+	dragStart: ie,
+	dragEnd: T
+}, mt = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "linestring", this.currentCoordinate = 0, this.currentId = void 0, this.keyEvents = ft, this.snapping = void 0, this.cursors = pt, this.mouseMove = !1, this.insertCoordinates = void 0, this.lastCommittedCoordinates = void 0, this.snappedPointId = void 0, this.lastMouseMoveEvent = void 0, this.showCoordinatePoints = !1, this.finishOnNthCoordinate = void 0, this.editable = !1, this.editedFeatureId = void 0, this.editedFeatureCoordinateIndex = void 0, this.editedSnapType = void 0, this.editedInsertIndex = void 0, this.editedPointId = void 0, this.coordinateSnapping = void 0, this.insertPoint = void 0, this.lineSnapping = void 0, this.featureSnapping = void 0, this.degreeSnapping = void 0, this.pixelDistance = void 0, this.clickBoundingBox = void 0, this.mutateFeature = void 0, this.readFeature = void 0, this.closingPoints = void 0, this.coordinatePoints = void 0, this.undoRedo = void 0, this.updateOptions(e);
 	}
@@ -1966,7 +1966,7 @@ var st = class extends N {
 	generateInsertCoordinates(e, t) {
 		if (!this.insertCoordinates || !this.lastCommittedCoordinates) throw Error("Not able to insert coordinates");
 		if (this.insertCoordinates.strategy !== "amount") throw Error("Strategy does not exist");
-		let n = O(e, t) / (this.insertCoordinates.value + 1), r = [];
+		let n = D(e, t) / (this.insertCoordinates.value + 1), r = [];
 		return this.projection === "globe" ? r = this.insertPoint.generateInsertionGeodesicCoordinates(e, t, n) : this.projection === "web-mercator" && (r = this.insertPoint.generateInsertionCoordinates(e, t, n)), r;
 	}
 	createLine(e) {
@@ -2105,7 +2105,7 @@ var st = class extends N {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onMouseMove(e) {
 		this.mouseMove = !0, this.setCursor(this.cursors.start), this.lastMouseMoveEvent = e;
@@ -2360,12 +2360,12 @@ var st = class extends N {
 		});
 	}
 }, ht = {
-	cancel: T,
-	finish: w
+	cancel: w,
+	finish: C
 }, gt = {
-	start: E,
-	close: ne
-}, _t = class extends C {
+	start: T,
+	close: re
+}, _t = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "polyline", this.currentCoordinate = 0, this.currentId = void 0, this.keyEvents = ht, this.cursors = gt, this.mouseMove = !1, this.snapping = void 0, this.snappedPointId = void 0, this.showCoordinatePoints = !1, this.mutateFeature = void 0, this.readFeature = void 0, this.pixelDistance = void 0, this.closingPoints = void 0, this.clickBoundingBox = void 0, this.lineSnapping = void 0, this.coordinateSnapping = void 0, this.featureSnapping = void 0, this.degreeSnapping = void 0, this.coordinatePoints = void 0, this.updateOptions(e);
 	}
@@ -2383,7 +2383,7 @@ var st = class extends N {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	finishLine() {
 		if (!this.currentId) return;
@@ -2622,10 +2622,10 @@ var St = class extends N {
 		return r;
 	}
 }, Ct = {
-	create: E,
-	dragStart: re,
-	dragEnd: E
-}, wt = class extends C {
+	create: T,
+	dragStart: ie,
+	dragEnd: T
+}, wt = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "point", this.cursors = Ct, this.editable = !1, this.snapping = void 0, this.editedFeatureId = void 0, this.pixelDistance = void 0, this.clickBoundingBox = void 0, this.pointSearch = void 0, this.mutateFeature = void 0, this.coordinateSnapping = void 0, this.lineSnapping = void 0, this.featureSnapping = void 0, this.updateOptions(e);
 	}
@@ -2636,7 +2636,7 @@ var St = class extends N {
 		this.setStarted(), this.setCursor(this.cursors.create);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onClick(e) {
 		e.button === "right" && this.allowPointerEvent(this.pointerEvents.rightClick, e) || e.isContextMenu && this.allowPointerEvent(this.pointerEvents.contextMenu, e) ? this.onRightClick(e) : e.button === "left" && this.allowPointerEvent(this.pointerEvents.leftClick, e) && this.onLeftClick(e);
@@ -2768,14 +2768,14 @@ var St = class extends N {
 		this.editedFeatureId === e.id && (this.editedFeatureId = void 0, this.setCursor(this.cursors.create));
 	}
 }, Tt = {
-	cancel: T,
-	finish: w
+	cancel: w,
+	finish: C
 }, Et = {
-	start: E,
-	close: ne,
-	dragStart: re,
-	dragEnd: E
-}, Dt = class extends C {
+	start: T,
+	close: re,
+	dragStart: ie,
+	dragEnd: T
+}, Dt = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "polygon", this.currentCoordinate = 0, this.currentId = void 0, this.keyEvents = Tt, this.cursors = Et, this.mouseMove = !1, this.showCoordinatePoints = !1, this.lastMouseMoveEvent = void 0, this.snapping = void 0, this.snappedPointId = void 0, this.editable = !1, this.editedFeatureId = void 0, this.editedFeatureCoordinateIndex = void 0, this.editedSnapType = void 0, this.editedInsertIndex = void 0, this.editedPointId = void 0, this.coordinatePoints = void 0, this.lineSnapping = void 0, this.coordinateSnapping = void 0, this.featureSnapping = void 0, this.degreeSnapping = void 0, this.pixelDistance = void 0, this.closingPoints = void 0, this.clickBoundingBox = void 0, this.mutateFeature = void 0, this.readFeature = void 0, this.undoRedo = void 0, this.updateOptions(e);
 	}
@@ -2822,7 +2822,7 @@ var St = class extends N {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	updateSnappedCoordinate(e) {
 		let t = this.snapCoordinate(e);
@@ -3315,9 +3315,9 @@ var St = class extends N {
 		return this.validateModeFeature(e, (e) => Se(e, this.coordinatePrecision));
 	}
 }, Ot = {
-	cancel: T,
-	finish: w
-}, kt = { start: E }, At = class extends C {
+	cancel: w,
+	finish: C
+}, kt = { start: T }, At = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "rectangle", this.startPosition = void 0, this.endPosition = void 0, this.currentRectangleId = void 0, this.keyEvents = Ot, this.cursors = kt, this.drawInteraction = "click-move", this.drawType = void 0, this.showCoordinatePoints = !1, this.mutateFeature = void 0, this.readFeature = void 0, this.coordinatePoints = void 0, this.updateOptions(e);
 	}
@@ -3398,7 +3398,7 @@ var St = class extends N {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onClick(e) {
 		this.moveDrawAllowed() && (e.button === "right" && this.allowPointerEvent(this.pointerEvents.rightClick, e) || e.button === "left" && this.allowPointerEvent(this.pointerEvents.leftClick, e) || e.isContextMenu && this.allowPointerEvent(this.pointerEvents.contextMenu, e)) && (this.startPosition ? (this.endPosition = [e.lng, e.lat], this.close()) : this.beginDrawing(e));
@@ -3465,10 +3465,10 @@ var St = class extends N {
 	registerBehaviors(e) {
 		this.readFeature = new R(e), this.mutateFeature = new L(e, { validate: this.validate }), this.coordinatePoints = new z(e, this.readFeature, this.mutateFeature);
 	}
-}, U = class extends C {
+}, U = class extends S {
 	constructor(e) {
 		if (!e.modeName) throw Error("Mode name is required for TerraDrawRenderMode");
-		super(e, !0), this.type = S.Render, this.mode = "render", this.updateOptions(e);
+		super(e, !0), this.type = ee.Render, this.mode = "render", this.updateOptions(e);
 	}
 	updateOptions(e) {
 		super.updateOptions(e);
@@ -3522,15 +3522,15 @@ var St = class extends N {
 	}
 };
 function jt(e, t) {
-	let n = e, r = t, i = k(n[1]), a = k(r[1]), o = k(r[0] - n[0]);
+	let n = e, r = t, i = O(n[1]), a = O(r[1]), o = O(r[0] - n[0]);
 	o > Math.PI && (o -= 2 * Math.PI), o < -Math.PI && (o += 2 * Math.PI);
-	let s = Math.log(Math.tan(a / 2 + Math.PI / 4) / Math.tan(i / 2 + Math.PI / 4)), c = (se(Math.atan2(o, s)) + 360) % 360;
+	let s = Math.log(Math.tan(a / 2 + Math.PI / 4) / Math.tan(i / 2 + Math.PI / 4)), c = (k(Math.atan2(o, s)) + 360) % 360;
 	return c > 180 ? -(360 - c) : c;
 }
 function Mt(e, t, n) {
 	let r = t;
 	t < 0 && (r = -Math.abs(r));
-	let i = r / ae, a = e[0] * Math.PI / 180, o = k(e[1]), s = k(n), c = i * Math.cos(s), l = o + c;
+	let i = r / oe, a = e[0] * Math.PI / 180, o = O(e[1]), s = O(n), c = i * Math.cos(s), l = o + c;
 	Math.abs(l) > Math.PI / 2 && (l = l > 0 ? Math.PI - l : -Math.PI - l);
 	let u = Math.log(Math.tan(l / 2 + Math.PI / 4) / Math.tan(o / 2 + Math.PI / 4)), d = Math.abs(u) > 1e-11 ? c / u : Math.cos(o), f = [(180 * (a + i * Math.sin(s) / d) / Math.PI + 540) % 360 - 180, 180 * l / Math.PI];
 	return f[0] += f[0] - e[0] > 180 ? -360 : e[0] - f[0] > 180 ? 360 : 0, f;
@@ -3540,7 +3540,7 @@ function Nt(e, t, n, r, i) {
 	return [A(s, n), A(c, n)];
 }
 function Pt(e, t, n) {
-	let r = Mt(e, 1e3 * O(e, t) / 2, jt(e, t));
+	let r = Mt(e, 1e3 * D(e, t) / 2, jt(e, t));
 	return [A(r[0], n), A(r[1], n)];
 }
 function Ft({ featureCoords: e, precision: t, unproject: n, project: r, projection: i }) {
@@ -4002,7 +4002,7 @@ var Kt = class extends N {
 				(e.geometry.type === "Polygon" ? e.geometry.coordinates[0] : e.geometry.coordinates).forEach((e) => {
 					let r = jt(n, e) + t, i = function(e, t) {
 						e[0] += e[0] - t[0] > 180 ? -360 : t[0] - e[0] > 180 ? 360 : 0;
-						let n = ae, r = t[1] * Math.PI / 180, i = e[1] * Math.PI / 180, a = i - r, o = Math.abs(e[0] - t[0]) * Math.PI / 180;
+						let n = oe, r = t[1] * Math.PI / 180, i = e[1] * Math.PI / 180, a = i - r, o = Math.abs(e[0] - t[0]) * Math.PI / 180;
 						o > Math.PI && (o -= 2 * Math.PI);
 						let s = Math.log(Math.tan(i / 2 + Math.PI / 4) / Math.tan(r / 2 + Math.PI / 4)), c = Math.abs(s) > 1e-11 ? a / s : Math.cos(r);
 						return Math.sqrt(a * a + c * c * o * o) * n;
@@ -4337,16 +4337,16 @@ var Yt = class extends N {
 		}), !0;
 	}
 }, Xt = {
-	deselect: T,
+	deselect: w,
 	delete: "Delete",
 	rotate: ["Control", "r"],
 	scale: ["Control", "s"]
 }, Zt = {
-	pointerOver: ie,
-	dragStart: ie,
-	dragEnd: ie,
-	insertMidpoint: E
-}, Qt = class extends te {
+	pointerOver: ae,
+	dragStart: ae,
+	dragEnd: ae,
+	insertMidpoint: T
+}, Qt = class extends ne {
 	getPointerOverFeatureCursor() {
 		return this.cursors.pointerOverFeature ?? this.cursors.pointerOver;
 	}
@@ -4396,7 +4396,7 @@ var Yt = class extends N {
 		this.selected.length && this.mutateFeature.deleteFeaturesIfPresent(this.selected), this.selected = [], this.dragTarget = { type: "none" };
 	}
 	clearDragTargetAndCursor() {
-		this.dragTarget = { type: "none" }, this.setCursor(D);
+		this.dragTarget = { type: "none" }, this.setCursor(E);
 	}
 	getSelectedFlags(e) {
 		let t = this.readFeature.getProperties(e), n = this.flags[t.mode]?.feature, r = n?.coordinates;
@@ -4551,7 +4551,7 @@ var Yt = class extends N {
 			}
 		}
 		if (p) return this.setCursor(this.cursors.dragStart), this.dragFeature.startDragging(e, n), void t(!1);
-		this.setCursor(D);
+		this.setCursor(E);
 	}
 	onDrag(e, t) {
 		if (!this.allowPointerEvent(this.pointerEvents.onDrag, e)) return;
@@ -4676,9 +4676,9 @@ var Yt = class extends N {
 			});
 		}
 	}
-}, $t = class extends C {
+}, $t = class extends S {
 	constructor(...e) {
-		super(...e), this.type = S.Static, this.mode = "static";
+		super(...e), this.type = ee.Static, this.mode = "static";
 	}
 	start() {}
 	stop() {}
@@ -5147,12 +5147,12 @@ function wn(e, t, n) {
 	return i < 0 && (i += 360), 180 - Math.abs(i - 90 - 90);
 }
 var Tn = {
-	cancel: T,
-	finish: w
+	cancel: w,
+	finish: C
 }, En = {
-	start: E,
-	close: ne
-}, Dn = class extends C {
+	start: T,
+	close: re
+}, Dn = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "angled-rectangle", this.currentCoordinate = 0, this.currentId = void 0, this.keyEvents = Tn, this.cursors = En, this.mouseMove = !1, this.showCoordinatePoints = !1, this.mutateFeature = void 0, this.readFeature = void 0, this.coordinatePoints = void 0, this.updateOptions(e);
 	}
@@ -5188,7 +5188,7 @@ var Tn = {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onMouseMove(e) {
 		if (this.mouseMove = !0, this.setCursor(this.cursors.start), this.currentId === void 0 || this.currentCoordinate === 0) return;
@@ -5221,7 +5221,7 @@ var Tn = {
 	}
 	getNewSecondAndThirdCoordinates(e) {
 		if (!this.currentId) throw Error("No current feature being drawn");
-		let t = this.readFeature.getCoordinate(this.currentId, 0), n = this.readFeature.getCoordinate(this.currentId, 1), r = Nt(t, n, this.coordinatePrecision, this.project, this.unproject), i = j(t[0], t[1]), a = j(r[0], r[1]), o = j(n[0], n[1]), s = j(e.lng, e.lat), c = B(s, i) < B(s, o), l = wn(i, a, s), u = c ? 90 - l : wn(i, a, s) - 90, d = B(a, s), f = Math.cos(k(u)) * d, p = V(i, o) + (function(e, t, n) {
+		let t = this.readFeature.getCoordinate(this.currentId, 0), n = this.readFeature.getCoordinate(this.currentId, 1), r = Nt(t, n, this.coordinatePrecision, this.project, this.unproject), i = j(t[0], t[1]), a = j(r[0], r[1]), o = j(n[0], n[1]), s = j(e.lng, e.lat), c = B(s, i) < B(s, o), l = wn(i, a, s), u = c ? 90 - l : wn(i, a, s) - 90, d = B(a, s), f = Math.cos(O(u)) * d, p = V(i, o) + (function(e, t, n) {
 			let r = (n.x - t.x) * (e.y - t.y) - (n.y - t.y) * (e.x - t.x);
 			return r > 1e-10 ? "left" : r < -1e-10 ? "right" : "left";
 		}(i, o, s) === "right" ? -90 : 90), m = Fe(i, f, p), h = Fe(o, f, p), g = M(m.x, m.y), _ = M(h.x, h.y);
@@ -5344,12 +5344,12 @@ function kn(e, t, n) {
 	return (t.x - e.x) * (n.y - e.y) - (t.y - e.y) * (n.x - e.x) <= 0;
 }
 var An = {
-	cancel: T,
-	finish: w
+	cancel: w,
+	finish: C
 }, jn = {
-	start: E,
-	close: ne
-}, Mn = class extends C {
+	start: T,
+	close: re
+}, Mn = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "sector", this.currentCoordinate = 0, this.currentId = void 0, this.keyEvents = An, this.direction = void 0, this.arcPoints = 64, this.cursors = jn, this.mouseMove = !1, this.showCoordinatePoints = !1, this.allowDirectionChange = !1, this.previousEndBearing = void 0, this.readFeature = void 0, this.mutateFeature = void 0, this.coordinatePoints = void 0, this.updateOptions(e);
 	}
@@ -5407,7 +5407,7 @@ var An = {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onMouseMove(e) {
 		if (this.mouseMove = !0, this.setCursor(this.cursors.start), this.currentId === void 0 || this.currentCoordinate === 0) return;
@@ -5531,12 +5531,12 @@ var An = {
 		this.readFeature = new R(e), this.mutateFeature = new L(e, { validate: this.validate }), this.coordinatePoints = new z(e, this.readFeature, this.mutateFeature);
 	}
 }, Nn = {
-	cancel: T,
-	finish: w
+	cancel: w,
+	finish: C
 }, Pn = {
-	start: E,
-	close: ne
-}, Fn = class extends C {
+	start: T,
+	close: re
+}, Fn = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "sensor", this.currentCoordinate = 0, this.currentId = void 0, this.currentInitialArcId = void 0, this.currentStartingPointId = void 0, this.keyEvents = Nn, this.direction = void 0, this.arcPoints = 64, this.cursors = Pn, this.mouseMove = !1, this.showCoordinatePoints = !1, this.allowDirectionChange = !1, this.previousEndBearing = void 0, this.readFeature = void 0, this.mutateFeature = void 0, this.coordinatePoints = void 0, this.updateOptions(e);
 	}
@@ -5551,7 +5551,7 @@ var An = {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onMouseMove(e) {
 		if (this.mouseMove = !0, this.setCursor(this.cursors.start), this.currentInitialArcId !== void 0 && this.currentStartingPointId !== void 0 && this.currentCoordinate !== 0) {
@@ -5750,8 +5750,8 @@ var An = {
 }, Ln = {
 	__proto__: null,
 	GeoJSONStore: bn,
-	TerraDrawBaseDrawMode: C,
-	TerraDrawBaseSelectMode: te,
+	TerraDrawBaseDrawMode: S,
+	TerraDrawBaseSelectMode: ne,
 	TerraDrawBaseAdapter: class {
 		constructor(e) {
 			this._nextKeyUpIsContextMenu = !1, this._lastPointerDownEventTarget = void 0, this._ignoreMismatchedPointerEvents = !1, this._minPixelDragDistance = void 0, this._minPixelDragDistanceDrawing = void 0, this._minPixelDragDistanceSelecting = void 0, this._lastDrawEvent = void 0, this._coordinatePrecision = void 0, this._heldKeys = /* @__PURE__ */ new Set(), this._listeners = [], this._dragState = "not-dragging", this._currentModeCallbacks = void 0, this._ignoreMismatchedPointerEvents = typeof e.ignoreMismatchedPointerEvents == "boolean" && e.ignoreMismatchedPointerEvents, this._minPixelDragDistance = typeof e.minPixelDragDistance == "number" ? e.minPixelDragDistance : 1, this._minPixelDragDistanceSelecting = typeof e.minPixelDragDistanceSelecting == "number" ? e.minPixelDragDistanceSelecting : 1, this._minPixelDragDistanceDrawing = typeof e.minPixelDragDistanceDrawing == "number" ? e.minPixelDragDistanceDrawing : 8, this._coordinatePrecision = typeof e.coordinatePrecision == "number" ? e.coordinatePrecision : 9;
@@ -5928,12 +5928,12 @@ var An = {
 	}),
 	SELECT_PROPERTIES: c
 }, Rn = {
-	cancel: T,
-	finish: w
+	cancel: w,
+	finish: C
 }, zn = {
-	start: E,
-	close: ne
-}, Bn = class extends C {
+	start: T,
+	close: re
+}, Bn = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "freehand-linestring", this.canClose = !1, this.showCoordinatePoints = !1, this.currentId = void 0, this.minDistance = 20, this.keyEvents = Rn, this.cursors = zn, this.preventNewFeature = !1, this.drawInteraction = "click-move", this.drawType = void 0, this.coordinatePoints = void 0, this.mutateFeature = void 0, this.readFeature = void 0, this.pixelDistance = void 0, this.closingPoints = void 0, this.updateOptions(e);
 	}
@@ -5975,7 +5975,7 @@ var An = {
 		this.setStarted(), this.setCursor(this.cursors.start);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	addCoordinate(e) {
 		if (this.currentId === void 0 || !1 === this.canClose) return void this.setCursor(this.cursors.start);
@@ -6108,10 +6108,10 @@ function Vn(e) {
 	return typeof e == "object" && Object.keys(e).every((t) => typeof t == "string" && Vn(e[t]));
 }
 var Hn = {
-	create: E,
-	dragStart: re,
-	dragEnd: E
-}, Un = class extends C {
+	create: T,
+	dragStart: ie,
+	dragEnd: T
+}, Un = class extends S {
 	constructor(e) {
 		super(e, !0), this.mode = "marker", this.cursors = Hn, this.editable = !1, this.snapping = void 0, this.editedFeatureId = void 0, this.pixelDistance = void 0, this.clickBoundingBox = void 0, this.pointSearch = void 0, this.mutateFeature = void 0, this.coordinateSnapping = void 0, this.lineSnapping = void 0, this.featureSnapping = void 0, this.updateOptions(e);
 	}
@@ -6122,7 +6122,7 @@ var Hn = {
 		this.setStarted(), this.setCursor(this.cursors.create);
 	}
 	stop() {
-		this.cleanUp(), this.setStopped(), this.setCursor(D);
+		this.cleanUp(), this.setStopped(), this.setCursor(E);
 	}
 	onClick(e) {
 		e.button === "right" && this.allowPointerEvent(this.pointerEvents.rightClick, e) || e.isContextMenu && this.allowPointerEvent(this.pointerEvents.contextMenu, e) ? this.onRightClick(e) : e.button === "left" && this.allowPointerEvent(this.pointerEvents.leftClick, e) && this.onLeftClick(e);
@@ -6292,7 +6292,7 @@ var Hn = {
 function Jn(e) {
 	return e !== void 0 && Number.isFinite(e) ? Math.max(0, Math.floor(e)) : Infinity;
 }
-var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class {
+var W = "undo", Yn = "redo", Xn = "push", Zn = "mode", Qn = "session", $n = class {
 	constructor(e) {
 		this.getModeState = void 0, this.getModeHistorySizes = void 0, this.undoMode = void 0, this.redoMode = void 0, this.clearModeHistory = void 0, this.onHistoryChange = void 0, this.maxStackSize = void 0, this.lastHistorySizes = {
 			undoSize: 0,
@@ -6322,7 +6322,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 		return !(!this.canUndo() || !this.undoMode || (this.undoMode(), this.emitHistoryChange(W), 0));
 	}
 	redo() {
-		return !(!this.canRedo() || !this.redoMode || (this.redoMode(), this.emitHistoryChange(G), 0));
+		return !(!this.canRedo() || !this.redoMode || (this.redoMode(), this.emitHistoryChange(Yn), 0));
 	}
 	clearHistory() {
 		this.clearModeHistory && this.clearModeHistory(), this.lastHistorySizes = {
@@ -6345,12 +6345,12 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 	emitPushIfHistoryChangedFromLastSnapshot() {
 		if (!this.inDrawingState()) return;
 		let e = this.getHistorySizes();
-		e.undoSize === this.lastHistorySizes.undoSize && e.redoSize === this.lastHistorySizes.redoSize || this.emitHistoryChange(K);
+		e.undoSize === this.lastHistorySizes.undoSize && e.redoSize === this.lastHistorySizes.redoSize || this.emitHistoryChange(Xn);
 	}
 	emitPushIfHistoryChanged(e) {
 		if (!this.inDrawingState()) return;
 		let t = this.getHistorySizes();
-		t.undoSize === e.undoSize && t.redoSize === e.redoSize || this.emitHistoryChange(K);
+		t.undoSize === e.undoSize && t.redoSize === e.redoSize || this.emitHistoryChange(Xn);
 	}
 	emitHistoryChange(e) {
 		if (!this.onHistoryChange) return;
@@ -6360,17 +6360,17 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 			redoSize: n
 		}, this.onHistoryChange({
 			cause: e,
-			stack: Yn,
+			stack: Zn,
 			undoStackSize: t,
 			redoStackSize: n
 		});
 	}
-}, Qn = class {
+}, er = class {
 	constructor(e) {
 		this.draw = void 0, this.onHistoryChange = void 0, this.maxStackSize = void 0, this.historyById = {}, this.undoStack = [], this.ignoreProgrammaticCreate = {}, this.ignoreProgrammaticDelete = {}, this.deletedFeatureIds = {}, this.redoStack = [], this.isReplayingHistory = !1, this.emitStackChange = (e) => {
 			this.onHistoryChange && this.onHistoryChange({
 				cause: e,
-				stack: Xn,
+				stack: Qn,
 				undoStackSize: this.undoStack.length,
 				redoStackSize: this.redoStack.length
 			});
@@ -6388,7 +6388,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 						action: "single"
 					}), r = !0);
 				}
-				r && (this.redoStack.length = 0, this.emitStackChange(K));
+				r && (this.redoStack.length = 0, this.emitStackChange(Xn));
 				return;
 			}
 			if (t !== "delete" && t !== "create") return;
@@ -6421,7 +6421,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 						action: "single"
 					});
 				}
-				t && (this.redoStack.length = 0, this.emitStackChange(K));
+				t && (this.redoStack.length = 0, this.emitStackChange(Xn));
 				return;
 			}
 			let r = !1, i = Array.isArray(e) ? e : [e], a = [];
@@ -6457,7 +6457,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 					action: "single"
 				});
 			}
-			r && (this.redoStack.length = 0, this.emitStackChange(K));
+			r && (this.redoStack.length = 0, this.emitStackChange(Xn));
 		}, this.handleFinish = (e) => {
 			if (!this.draw || this.maxStackSize === 0 || this.isReplayingHistory) return;
 			let t = Array.isArray(e) ? e : [e], n = !1;
@@ -6468,7 +6468,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 					id: e,
 					toIndex: this.historyById[t].length - 1,
 					action: "single"
-				}), this.emitStackChange(K));
+				}), this.emitStackChange(Xn));
 			}
 		}, this.maxStackSize = Jn(e?.maxStackSize);
 	}
@@ -6560,7 +6560,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 		let { id: e, toIndex: t, snapshot: n, action: r, metadata: i } = this.redoStack.pop();
 		if (r === "batch-create") {
 			let e = i?.entries || [];
-			if (e.length === 0) return this.emitStackChange(G), !1;
+			if (e.length === 0) return this.emitStackChange(Yn), !1;
 			let t = e.map((e) => e.snapshot).filter((e) => e !== void 0);
 			return t.length > 0 && (e.forEach((e) => {
 				this.ignoreProgrammaticCreate[e.id] = !0;
@@ -6569,11 +6569,11 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 				toIndex: e[0].toIndex,
 				action: "batch-create",
 				metadata: { entries: e }
-			}), this.emitStackChange(G), !0;
+			}), this.emitStackChange(Yn), !0;
 		}
 		if (r === "batch-delete") {
 			let e = i?.entries || [];
-			if (e.length === 0) return this.emitStackChange(G), !1;
+			if (e.length === 0) return this.emitStackChange(Yn), !1;
 			let t = e.map((e) => e.id);
 			return t.forEach((e) => {
 				this.ignoreProgrammaticDelete[e] = !0, this.deletedFeatureIds[e] = !0;
@@ -6582,28 +6582,28 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 				toIndex: e[0].toIndex,
 				action: "batch-delete",
 				metadata: { entries: e }
-			}), this.emitStackChange(G), !0;
+			}), this.emitStackChange(Yn), !0;
 		}
 		let a = String(e), o = this.historyById[a] || (this.historyById[a] = []);
 		if (r === "delete") return this.ignoreProgrammaticDelete[e] = !0, this.deletedFeatureIds[e] = !0, this.draw.removeFeatures([e]), this.pushUndoStackEntry({
 			id: e,
 			toIndex: t,
 			action: "single"
-		}), this.emitStackChange(G), !0;
+		}), this.emitStackChange(Yn), !0;
 		if (t <= 0) {
 			let t = o[0];
 			return !!t && (this.ignoreProgrammaticCreate[e] = !0, this.draw.addFeatures([t]), this.pushUndoStackEntry({
 				id: e,
 				toIndex: 0,
 				action: "single"
-			}), this.emitStackChange(G), !0);
+			}), this.emitStackChange(Yn), !0);
 		}
 		let s = n || o[t];
 		return !!s && (o.length === t ? o.push(s) : (o[t] = s, o.length = t + 1), this.applySnapshotDuringReplay(e, s), this.pushUndoStackEntry({
 			id: e,
 			toIndex: t,
 			action: "single"
-		}), this.emitStackChange(G), !0);
+		}), this.emitStackChange(Yn), !0);
 	}
 	clearHistory() {
 		let e = {};
@@ -6619,7 +6619,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 	redoSize() {
 		return this.redoStack.length;
 	}
-}, $n = class {
+}, tr = class {
 	constructor(e) {
 		this.modeLevel = void 0, this.sessionLevel = void 0, this.shouldPreferMode = void 0, this.onHistoryChange = void 0, this.shouldEmitHistoryChange = void 0, this.modeLevel = e.modeLevel, this.sessionLevel = e.sessionLevel, this.shouldPreferMode = e.shouldPreferMode, this.onHistoryChange = e.onHistoryChange, this.shouldEmitHistoryChange = e.shouldEmitHistoryChange ?? (() => !0);
 	}
@@ -6639,11 +6639,11 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 	}
 	activeStackForUndo() {
 		var e, t;
-		return this.shouldPreferMode() && (e = this.modeLevel) != null && e.canUndo() ? Yn : this.hasSessionUndo() ? Xn : (t = this.modeLevel) != null && t.canUndo() ? Yn : void 0;
+		return this.shouldPreferMode() && (e = this.modeLevel) != null && e.canUndo() ? Zn : this.hasSessionUndo() ? Qn : (t = this.modeLevel) != null && t.canUndo() ? Zn : void 0;
 	}
 	activeStackForRedo() {
 		var e, t;
-		return this.shouldPreferMode() && (e = this.modeLevel) != null && e.canRedo() ? Yn : this.hasSessionRedo() ? Xn : (t = this.modeLevel) != null && t.canRedo() ? Yn : void 0;
+		return this.shouldPreferMode() && (e = this.modeLevel) != null && e.canRedo() ? Zn : this.hasSessionRedo() ? Qn : (t = this.modeLevel) != null && t.canRedo() ? Zn : void 0;
 	}
 	canUndo() {
 		return this.activeStackForUndo() !== void 0;
@@ -6653,29 +6653,29 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 	}
 	undo() {
 		let e = this.activeStackForUndo();
-		return !!e && (e === Yn ? !!this.modeLevel && this.modeLevel.undo() : !(!this.sessionLevel || !this.sessionLevel.canUndo()) && this.sessionLevel.undo());
+		return !!e && (e === Zn ? !!this.modeLevel && this.modeLevel.undo() : !(!this.sessionLevel || !this.sessionLevel.canUndo()) && this.sessionLevel.undo());
 	}
 	redo() {
 		let e = this.activeStackForRedo();
-		return !!e && (e === Yn ? !!this.modeLevel && this.modeLevel.redo() : !(!this.sessionLevel || !this.sessionLevel.canRedo()) && this.sessionLevel.redo());
+		return !!e && (e === Zn ? !!this.modeLevel && this.modeLevel.redo() : !(!this.sessionLevel || !this.sessionLevel.canRedo()) && this.sessionLevel.redo());
 	}
 	clearHistory() {
 		this.modeLevel && this.modeLevel.clearHistory(), this.sessionLevel && this.sessionLevel.clearHistory();
 	}
 	emitHistoryPushForCompletedAction() {
 		this.sessionLevel ? this.emitStackHistoryChange({
-			cause: K,
+			cause: Xn,
 			undoStackSize: this.sessionLevel.undoSize(),
 			redoStackSize: this.sessionLevel.redoSize(),
-			stack: Xn
+			stack: Qn
 		}) : this.modeLevel && this.emitStackHistoryChange({
-			cause: K,
+			cause: Xn,
 			undoStackSize: this.modeLevel.undoSize(),
 			redoStackSize: this.modeLevel.redoSize(),
-			stack: Yn
+			stack: Zn
 		});
 	}
-}, er = class {
+}, nr = class {
 	constructor(e) {
 		var n, r, i, a;
 		this._modes = void 0, this._mode = void 0, this._adapter = void 0, this._enabled = !1, this._store = void 0, this._eventListeners = void 0, this._instanceSelectModes = void 0, this.sessionUndoRedoEnabled = !1, this.keyboardShortcutsMatcher = void 0, this.drawingUndoRedo = void 0, this.sessionUndoRedo = void 0, this.undoRedoCoordinator = void 0, this._adapter = e.adapter, this._instanceSelectModes = [];
@@ -6691,7 +6691,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 		}, {}), d = Object.keys(u);
 		if (d.length === 0) throw Error("No modes provided");
 		d.forEach((e) => {
-			u[e].type === S.Select && this._instanceSelectModes.push(e);
+			u[e].type === ee.Select && this._instanceSelectModes.push(e);
 		}), this._modes = t({}, u, { static: this._mode }), this._eventListeners = {
 			change: [],
 			select: [],
@@ -6805,7 +6805,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 				var t;
 				(t = this.undoRedoCoordinator) == null || t.emitStackHistoryChange(e);
 			}
-		}), this.undoRedoCoordinator = new $n({
+		}), this.undoRedoCoordinator = new tr({
 			modeLevel: this.drawingUndoRedo,
 			sessionLevel: this.sessionUndoRedo,
 			shouldPreferMode: () => this.getModeState() === "drawing",
@@ -6895,7 +6895,7 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 				let t = i[e], n = B(f(t[0], t[1]), p);
 				n < s && (o = e, s = n, a = t);
 			}
-			return r.properties.closestCoordinateIndexToEvent = o, r.properties.closestCoordinatePixelDistanceToEvent = s, r.properties.closestCoordinateDistanceKmToEvent = O(a, [e, t]), r;
+			return r.properties.closestCoordinateIndexToEvent = o, r.properties.closestCoordinatePixelDistanceToEvent = s, r.properties.closestCoordinateDistanceKmToEvent = D(a, [e, t]), r;
 		});
 	}
 	getSelectModeOrThrow(e = void 0) {
@@ -7155,16 +7155,16 @@ var W = "undo", G = "redo", K = "push", Yn = "mode", Xn = "session", Zn = class 
 	}
 };
 // node_modules/.pnpm/terra-draw-maplibre-gl-adapter@1.4.1_maplibre-gl@6.12.0_terra-draw@1.36.0/node_modules/terra-draw-maplibre-gl-adapter/dist/terra-draw-maplibre-gl-adapter.modern.js
-function tr() {
-	return tr = Object.assign ? Object.assign.bind() : function(e) {
+function rr() {
+	return rr = Object.assign ? Object.assign.bind() : function(e) {
 		for (var t = 1; t < arguments.length; t++) {
 			var n = arguments[t];
 			for (var r in n) ({}).hasOwnProperty.call(n, r) && (e[r] = n[r]);
 		}
 		return e;
-	}, tr.apply(null, arguments);
+	}, rr.apply(null, arguments);
 }
-var nr = class extends Ln.TerraDrawBaseAdapter {
+var ir = class extends Ln.TerraDrawBaseAdapter {
 	constructor(e) {
 		super(e), this._renderBeforeLayerId = void 0, this._prefixId = void 0, this._initialDragPan = void 0, this._initialDragRotate = void 0, this._nextRender = void 0, this._map = void 0, this._container = void 0, this.changedIds = {
 			deletion: !1,
@@ -7257,7 +7257,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 			source: e,
 			type: "line",
 			layout: { "line-sort-key": ["get", "zIndex"] },
-			paint: tr({}, t, {
+			paint: rr({}, t, {
 				"line-width": ["get", "lineStringWidth"],
 				"line-color": ["get", "lineStringColor"],
 				"line-opacity": ["get", "lineStringOpacity"]
@@ -7414,7 +7414,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		var a;
 		this._renderBeforeLayerId && (this._map.moveLayer(i, this._renderBeforeLayerId), this._map.moveLayer(r, i), this._map.moveLayer(`${n}-outline`, r), this._map.moveLayer(n, `${n}-outline`)), (t = this._currentModeCallbacks) != null && t.onReady && ((a = this._currentModeCallbacks) == null || a.onReady());
 	}
-}, rr = [
+}, ar = [
 	"render",
 	"point",
 	"marker",
@@ -7436,7 +7436,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 	"undo",
 	"redo",
 	"download"
-], ir = [
+], or = [
 	"render",
 	"routing",
 	"time-isochrone",
@@ -7446,7 +7446,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 	"delete",
 	"download",
 	"settings"
-], ar = {
+], sr = {
 	modes: [
 		"render",
 		"point",
@@ -7470,7 +7470,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		"download"
 	],
 	open: !1
-}, or = {
+}, cr = {
 	kilometer: "km",
 	meter: "m",
 	centimeter: "cm",
@@ -7485,21 +7485,21 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 	"square yards": "yd²",
 	acres: "acres",
 	"square miles": "mi²"
-}, sr = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='UTF-8'%20standalone='no'?%3e%3csvg%20xmlns:dc='http://purl.org/dc/elements/1.1/'%20xmlns:cc='http://creativecommons.org/ns%23'%20xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23'%20xmlns:svg='http://www.w3.org/2000/svg'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'%20xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'%20inkscape:version='1.0%20(4035a4fb49,%202020-05-01)'%20sodipodi:docname='poi.svg'%20id='svg4460'%20height='100'%20width='100'%20version='1.1'%3e%3csodipodi:namedview%20inkscape:document-rotation='0'%20inkscape:current-layer='svg4460'%20inkscape:window-maximized='1'%20inkscape:window-y='-8'%20inkscape:window-x='-8'%20inkscape:cy='70.031285'%20inkscape:cx='-78.460726'%20inkscape:zoom='2.02'%20showgrid='false'%20id='namedview11'%20inkscape:window-height='1017'%20inkscape:window-width='1920'%20inkscape:pageshadow='2'%20inkscape:pageopacity='0'%20guidetolerance='10'%20gridtolerance='10'%20objecttolerance='10'%20borderopacity='1'%20bordercolor='%23666666'%20pagecolor='%23ffffff'%20/%3e%3cdefs%20id='defs4462'%20/%3e%3cmetadata%20id='metadata4465'%3e%3crdf:RDF%3e%3ccc:Work%20rdf:about=''%3e%3cdc:format%3eimage/svg+xml%3c/dc:format%3e%3cdc:type%20rdf:resource='http://purl.org/dc/dcmitype/StillImage'%20/%3e%3cdc:title%3e%3c/dc:title%3e%3c/cc:Work%3e%3c/rdf:RDF%3e%3c/metadata%3e%3cpath%20d='M%2050.001528,3.3861402e-7%20C%2030.763177,3.3861402e-7%2015,15.718144%2015,34.901534%20c%200,7.432782%202.373565,14.339962%206.391689,20.019029%20l%2024.338528,42.073163%20c%203.40849,4.452814%205.674917,3.607154%208.509014,-0.23458%20L%2081.083105,51.075788%20C%2081.625418,50.0948%2082.050328,49.050173%2082.421327,47.983517%2084.078241,43.936622%2085.000002,39.521943%2085,34.901534%2085,15.718144%2069.23988,3.3861402e-7%2050.001528,3.3861402e-7%20Z%20m%200,16.35400066138598%20c%2010.359296,0%2018.597616,8.21783%2018.597618,18.547533%200,10.329703%20-8.238322,18.544487%20-18.597618,18.544487%20-10.359299,0%20-18.600672,-8.214784%20-18.600672,-18.544487%200,-10.329703%208.241373,-18.547533%2018.600672,-18.547533%20z'%20style='fill:rgb(95,%2099,%20104);stroke-width:4.26019'%20id='path4135'%20/%3e%3c/svg%3e", cr = {
+}, lr = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='UTF-8'%20standalone='no'?%3e%3csvg%20xmlns:dc='http://purl.org/dc/elements/1.1/'%20xmlns:cc='http://creativecommons.org/ns%23'%20xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23'%20xmlns:svg='http://www.w3.org/2000/svg'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'%20xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'%20inkscape:version='1.0%20(4035a4fb49,%202020-05-01)'%20sodipodi:docname='poi.svg'%20id='svg4460'%20height='100'%20width='100'%20version='1.1'%3e%3csodipodi:namedview%20inkscape:document-rotation='0'%20inkscape:current-layer='svg4460'%20inkscape:window-maximized='1'%20inkscape:window-y='-8'%20inkscape:window-x='-8'%20inkscape:cy='70.031285'%20inkscape:cx='-78.460726'%20inkscape:zoom='2.02'%20showgrid='false'%20id='namedview11'%20inkscape:window-height='1017'%20inkscape:window-width='1920'%20inkscape:pageshadow='2'%20inkscape:pageopacity='0'%20guidetolerance='10'%20gridtolerance='10'%20objecttolerance='10'%20borderopacity='1'%20bordercolor='%23666666'%20pagecolor='%23ffffff'%20/%3e%3cdefs%20id='defs4462'%20/%3e%3cmetadata%20id='metadata4465'%3e%3crdf:RDF%3e%3ccc:Work%20rdf:about=''%3e%3cdc:format%3eimage/svg+xml%3c/dc:format%3e%3cdc:type%20rdf:resource='http://purl.org/dc/dcmitype/StillImage'%20/%3e%3cdc:title%3e%3c/dc:title%3e%3c/cc:Work%3e%3c/rdf:RDF%3e%3c/metadata%3e%3cpath%20d='M%2050.001528,3.3861402e-7%20C%2030.763177,3.3861402e-7%2015,15.718144%2015,34.901534%20c%200,7.432782%202.373565,14.339962%206.391689,20.019029%20l%2024.338528,42.073163%20c%203.40849,4.452814%205.674917,3.607154%208.509014,-0.23458%20L%2081.083105,51.075788%20C%2081.625418,50.0948%2082.050328,49.050173%2082.421327,47.983517%2084.078241,43.936622%2085.000002,39.521943%2085,34.901534%2085,15.718144%2069.23988,3.3861402e-7%2050.001528,3.3861402e-7%20Z%20m%200,16.35400066138598%20c%2010.359296,0%2018.597616,8.21783%2018.597618,18.547533%200,10.329703%20-8.238322,18.544487%20-18.597618,18.544487%20-10.359299,0%20-18.600672,-8.214784%20-18.600672,-18.544487%200,-10.329703%208.241373,-18.547533%2018.600672,-18.547533%20z'%20style='fill:rgb(95,%2099,%20104);stroke-width:4.26019'%20id='path4135'%20/%3e%3c/svg%3e", ur = {
 	url: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
 	encoding: "terrarium",
 	tileSize: 256,
 	minzoom: 5,
 	maxzoom: 15,
 	tms: !1
-}, lr = {
+}, dr = {
 	url: "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
 	encoding: "terrarium",
 	tileSize: 512,
 	minzoom: 0,
 	maxzoom: 12,
 	tms: !1
-}, ur = {
+}, fr = {
 	modes: [
 		"render",
 		"point",
@@ -7537,7 +7537,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		marker: new Un({
 			editable: !0,
 			styles: {
-				markerUrl: sr,
+				markerUrl: lr,
 				markerWidth: 27,
 				markerHeight: 27
 			}
@@ -7969,13 +7969,13 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		}
 	},
 	computeElevation: !1,
-	terrainSource: lr,
+	terrainSource: dr,
 	measureUnitType: "metric",
 	distancePrecision: 2,
 	distanceUnit: void 0,
 	areaPrecision: 2,
 	areaUnit: void 0,
-	measureUnitSymbols: JSON.parse(JSON.stringify(or)),
+	measureUnitSymbols: JSON.parse(JSON.stringify(cr)),
 	elevationCacheConfig: {
 		enabled: !0,
 		maxSize: 1e3,
@@ -7983,7 +7983,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		precision: 9
 	},
 	adapterOptions: { prefixId: "td-measure" }
-}, dr = [
+}, pr = [
 	{
 		value: "pedestrian",
 		label: "Pedestrian"
@@ -7996,13 +7996,13 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		value: "auto",
 		label: "Car"
 	}
-], fr = [{
+], mr = [{
 	value: "kilometers",
 	label: "km"
 }, {
 	value: "miles",
 	label: "mile"
-}], pr = class {
+}], hr = class {
 	tripData = [];
 	getTripData() {
 		return this.tripData;
@@ -8051,7 +8051,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 				maneuvers: e.maneuvers
 			};
 		});
-		let m = dr.find((e) => e.value === t)?.label, h = this.geoLineString(l, {
+		let m = pr.find((e) => e.value === t)?.label, h = this.geoLineString(l, {
 			costingModel: m,
 			distance: u,
 			distance_unit: n === "kilometers" ? "km" : "mi",
@@ -8111,7 +8111,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		}
 		return a;
 	}
-}, mr = class extends mt {
+}, gr = class extends mt {
 	_url;
 	_costingModel;
 	_distanceUnit;
@@ -8207,7 +8207,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		if (!this._url) return;
 		let r = n.map((t) => new e(t[0], t[1]));
 		if (r.length < 2) return;
-		let i = new pr(this._url);
+		let i = new hr(this._url);
 		try {
 			let e = await i.calcRoute(r, this._costingModel, this._distanceUnit);
 			if (!e || !e.feature) return;
@@ -8259,13 +8259,13 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 			console.error("Valhalla routing error:", e);
 		}
 	}
-}, hr = [{
+}, _r = [{
 	value: "time",
 	label: "Time"
 }, {
 	value: "distance",
 	label: "Distance"
-}], gr = class {
+}], vr = class {
 	url;
 	constructor(e) {
 		this.url = e;
@@ -8286,7 +8286,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		}, s = `${this.url}/isochrone?json=${JSON.stringify(o)}`;
 		return await (await fetch(s)).json();
 	}
-}, { TerraDrawBaseDrawMode: _r } = Ln, vr = [
+}, { TerraDrawBaseDrawMode: yr } = Ln, br = [
 	{
 		time: 3,
 		distance: 1,
@@ -8307,7 +8307,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		distance: 4,
 		color: "#ff00ff"
 	}
-], yr = class extends _r {
+], xr = class extends yr {
 	_url;
 	_costingModel;
 	_contours;
@@ -8331,7 +8331,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		this._contours = e;
 	}
 	constructor(e) {
-		super({ styles: e?.styles ?? {} }), this._url = e.url, this._costingModel = e.costingModel ?? "auto", this._contours = e.contours ?? [...vr], this.styles = e.styles ?? {};
+		super({ styles: e?.styles ?? {} }), this._url = e.url, this._costingModel = e.costingModel ?? "auto", this._contours = e.contours ?? [...br], this.styles = e.styles ?? {};
 	}
 	start() {
 		this.setStarted(), this.setCursor("crosshair");
@@ -8396,7 +8396,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 	}
 	async computeIsochrone(e, t) {
 		if (!this._url) return;
-		let n = new gr(this._url);
+		let n = new vr(this._url);
 		try {
 			let r = await n.calcIsochrone(t[0], t[1], this.contourType, this._costingModel, this._contours), i = this.store.create(r.features.map((t) => ({
 				geometry: t.geometry,
@@ -8424,13 +8424,13 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 			this.store.delete([e]);
 		} catch {}
 	}
-}, br = class extends yr {
+}, Sr = class extends xr {
 	mode = "time-isochrone";
 	contourType = "time";
-}, xr = class extends yr {
+}, Cr = class extends xr {
 	mode = "distance-isochrone";
 	contourType = "distance";
-}, Sr = [
+}, wr = [
 	{
 		time: 3,
 		distance: 1,
@@ -8451,7 +8451,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		distance: 4,
 		color: "#ff00ff"
 	}
-], Cr = {
+], Tr = {
 	modes: [
 		"render",
 		"routing",
@@ -8465,10 +8465,10 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 	],
 	open: !1,
 	modeOptions: {
-		"time-isochrone": new br({
+		"time-isochrone": new Sr({
 			url: "",
 			costingModel: "auto",
-			contours: Sr,
+			contours: wr,
 			styles: {
 				pointColor: "#FFFFFF",
 				pointWidth: 5,
@@ -8476,10 +8476,10 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 				pointOutlineWidth: 1
 			}
 		}),
-		"distance-isochrone": new xr({
+		"distance-isochrone": new Cr({
 			url: "",
 			costingModel: "auto",
-			contours: Sr,
+			contours: wr,
 			styles: {
 				pointColor: "#FFFFFF",
 				pointWidth: 5,
@@ -8487,7 +8487,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 				pointOutlineWidth: 1
 			}
 		}),
-		routing: new mr({
+		routing: new gr({
 			url: "",
 			costingModel: "auto",
 			distanceUnit: "kilometers",
@@ -8675,7 +8675,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 			"text-halo-color": "rgb(255, 255, 255)"
 		}
 	}
-}, wr = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='UTF-8'%20standalone='no'?%3e%3csvg%20xmlns:dc='http://purl.org/dc/elements/1.1/'%20xmlns:cc='http://creativecommons.org/ns%23'%20xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23'%20xmlns:svg='http://www.w3.org/2000/svg'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'%20xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'%20inkscape:version='1.0%20(4035a4fb49,%202020-05-01)'%20sodipodi:docname='poi.svg'%20id='svg4460'%20height='100'%20width='100'%20version='1.1'%3e%3csodipodi:namedview%20inkscape:document-rotation='0'%20inkscape:current-layer='svg4460'%20inkscape:window-maximized='1'%20inkscape:window-y='-8'%20inkscape:window-x='-8'%20inkscape:cy='70.031285'%20inkscape:cx='-78.460726'%20inkscape:zoom='2.02'%20showgrid='false'%20id='namedview11'%20inkscape:window-height='1017'%20inkscape:window-width='1920'%20inkscape:pageshadow='2'%20inkscape:pageopacity='0'%20guidetolerance='10'%20gridtolerance='10'%20objecttolerance='10'%20borderopacity='1'%20bordercolor='%23666666'%20pagecolor='%23ffffff'%20/%3e%3cdefs%20id='defs4462'%20/%3e%3cmetadata%20id='metadata4465'%3e%3crdf:RDF%3e%3ccc:Work%20rdf:about=''%3e%3cdc:format%3eimage/svg+xml%3c/dc:format%3e%3cdc:type%20rdf:resource='http://purl.org/dc/dcmitype/StillImage'%20/%3e%3cdc:title%3e%3c/dc:title%3e%3c/cc:Work%3e%3c/rdf:RDF%3e%3c/metadata%3e%3cpath%20d='M%2050.001528,3.3861402e-7%20C%2030.763177,3.3861402e-7%2015,15.718144%2015,34.901534%20c%200,7.432782%202.373565,14.339962%206.391689,20.019029%20l%2024.338528,42.073163%20c%203.40849,4.452814%205.674917,3.607154%208.509014,-0.23458%20L%2081.083105,51.075788%20C%2081.625418,50.0948%2082.050328,49.050173%2082.421327,47.983517%2084.078241,43.936622%2085.000002,39.521943%2085,34.901534%2085,15.718144%2069.23988,3.3861402e-7%2050.001528,3.3861402e-7%20Z%20m%200,16.35400066138598%20c%2010.359296,0%2018.597616,8.21783%2018.597618,18.547533%200,10.329703%20-8.238322,18.544487%20-18.597618,18.544487%20-10.359299,0%20-18.600672,-8.214784%20-18.600672,-18.544487%200,-10.329703%208.241373,-18.547533%2018.600672,-18.547533%20z'%20style='fill:%233FB1CE;stroke-width:4.26019'%20id='path4135'%20/%3e%3c/svg%3e", { TerraDrawBaseDrawMode: Tr } = Ln, Er = class extends Tr {
+}, Er = "data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='UTF-8'%20standalone='no'?%3e%3csvg%20xmlns:dc='http://purl.org/dc/elements/1.1/'%20xmlns:cc='http://creativecommons.org/ns%23'%20xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23'%20xmlns:svg='http://www.w3.org/2000/svg'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'%20xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'%20inkscape:version='1.0%20(4035a4fb49,%202020-05-01)'%20sodipodi:docname='poi.svg'%20id='svg4460'%20height='100'%20width='100'%20version='1.1'%3e%3csodipodi:namedview%20inkscape:document-rotation='0'%20inkscape:current-layer='svg4460'%20inkscape:window-maximized='1'%20inkscape:window-y='-8'%20inkscape:window-x='-8'%20inkscape:cy='70.031285'%20inkscape:cx='-78.460726'%20inkscape:zoom='2.02'%20showgrid='false'%20id='namedview11'%20inkscape:window-height='1017'%20inkscape:window-width='1920'%20inkscape:pageshadow='2'%20inkscape:pageopacity='0'%20guidetolerance='10'%20gridtolerance='10'%20objecttolerance='10'%20borderopacity='1'%20bordercolor='%23666666'%20pagecolor='%23ffffff'%20/%3e%3cdefs%20id='defs4462'%20/%3e%3cmetadata%20id='metadata4465'%3e%3crdf:RDF%3e%3ccc:Work%20rdf:about=''%3e%3cdc:format%3eimage/svg+xml%3c/dc:format%3e%3cdc:type%20rdf:resource='http://purl.org/dc/dcmitype/StillImage'%20/%3e%3cdc:title%3e%3c/dc:title%3e%3c/cc:Work%3e%3c/rdf:RDF%3e%3c/metadata%3e%3cpath%20d='M%2050.001528,3.3861402e-7%20C%2030.763177,3.3861402e-7%2015,15.718144%2015,34.901534%20c%200,7.432782%202.373565,14.339962%206.391689,20.019029%20l%2024.338528,42.073163%20c%203.40849,4.452814%205.674917,3.607154%208.509014,-0.23458%20L%2081.083105,51.075788%20C%2081.625418,50.0948%2082.050328,49.050173%2082.421327,47.983517%2084.078241,43.936622%2085.000002,39.521943%2085,34.901534%2085,15.718144%2069.23988,3.3861402e-7%2050.001528,3.3861402e-7%20Z%20m%200,16.35400066138598%20c%2010.359296,0%2018.597616,8.21783%2018.597618,18.547533%200,10.329703%20-8.238322,18.544487%20-18.597618,18.544487%20-10.359299,0%20-18.600672,-8.214784%20-18.600672,-18.544487%200,-10.329703%208.241373,-18.547533%2018.600672,-18.547533%20z'%20style='fill:%233FB1CE;stroke-width:4.26019'%20id='path4135'%20/%3e%3c/svg%3e", { TerraDrawBaseDrawMode: Dr } = Ln, Or = class extends Dr {
 	mode = "text";
 	options;
 	editable = !1;
@@ -8742,15 +8742,15 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 	createDomStyles(e) {
 		switch (e) {
 			case "textArea": return this.options?.domStyles?.textArea ? {
-				...ti,
+				...hi,
 				...this.options?.domStyles?.textArea
-			} : { ...ti };
+			} : { ...hi };
 			case "submitButton": return this.options?.domStyles?.submitButton ? {
-				...ni,
+				...gi,
 				...this.options?.domStyles?.submitButton
-			} : { ...ni };
-			case "textAreaWrapper": return { ...ri };
-			case "span": return { ...ii };
+			} : { ...gi };
+			case "textAreaWrapper": return { ..._i };
+			case "span": return { ...vi };
 		}
 	}
 	mountTextAreaPopup(e, t, n, r, i) {
@@ -8891,7 +8891,7 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 		}
 		return r;
 	}
-}, Dr = class extends Ne {
+}, kr = class extends Ne {
 	shapeWrapped = !1;
 	constructor(e) {
 		super({
@@ -8914,59 +8914,64 @@ var nr = class extends Ln.TerraDrawBaseAdapter {
 			}), a;
 		};
 	}
-}, Or = 64, q = 1, kr = 6371008.8, Ar = [
+}, Ar = 64, G = 1, jr = 6371008.8, Mr = [
 	"circle",
 	"ellipse",
 	"rectangle",
-	"angled-rectangle"
+	"angled-rectangle",
+	"sector",
+	"sensor"
 ];
-function J(e) {
-	return Ar.includes(e);
+function Nr(e) {
+	return Mr.includes(e);
 }
-function Y(e) {
+function K(e) {
 	return e * Math.PI / 180;
 }
-function jr(e) {
+function Pr(e) {
 	return e * 180 / Math.PI;
 }
-function Mr(e, t, n, r) {
+function q(e) {
+	return (e % 360 + 360) % 360;
+}
+function J(e, t, n, r) {
 	if (!Number.isFinite(n) || Math.abs(n) < 1e-6) return [e, t];
-	let i = n / kr, a = Y(r), o = Y(t), s = Y(e), c = Math.sin(o), l = Math.cos(o), u = Math.sin(i), d = Math.cos(i), f = Math.asin(c * d + l * u * Math.cos(a));
-	return [jr(s + Math.atan2(Math.sin(a) * u * l, d - c * Math.sin(f))), jr(f)];
+	let i = n / jr, a = K(r), o = K(t), s = K(e), c = Math.sin(o), l = Math.cos(o), u = Math.sin(i), d = Math.cos(i), f = Math.asin(c * d + l * u * Math.cos(a));
+	return [Pr(s + Math.atan2(Math.sin(a) * u * l, d - c * Math.sin(f))), Pr(f)];
+}
+function Y(e, t) {
+	let n = K(e[1]), r = K(t[1]), i = r - n, a = K(t[0] - e[0]), o = Math.sin(i / 2) ** 2 + Math.cos(n) * Math.cos(r) * Math.sin(a / 2) ** 2;
+	return 2 * jr * Math.asin(Math.min(1, Math.sqrt(o)));
 }
 function X(e, t) {
-	let n = Y(e[1]), r = Y(t[1]), i = r - n, a = Y(t[0] - e[0]), o = Math.sin(i / 2) ** 2 + Math.cos(n) * Math.cos(r) * Math.sin(a / 2) ** 2;
-	return 2 * kr * Math.asin(Math.min(1, Math.sqrt(o)));
+	let n = K(e[1]), r = K(t[1]), i = K(t[0] - e[0]), a = Math.sin(i) * Math.cos(r), o = Math.cos(n) * Math.sin(r) - Math.sin(n) * Math.cos(r) * Math.cos(i);
+	return q(Pr(Math.atan2(a, o)));
 }
-function Nr(e, t) {
-	let n = Y(e[1]), r = Y(t[1]), i = Y(t[0] - e[0]), a = Math.sin(i) * Math.cos(r), o = Math.cos(n) * Math.sin(r) - Math.sin(n) * Math.cos(r) * Math.cos(i);
-	return (jr(Math.atan2(a, o)) + 360) % 360;
-}
-function Pr(e, t, n) {
-	let r = X(e, t), i = Y(Nr(e, t)), a = Math.sin(i) * r, o = Math.cos(i) * r, s = Y(n);
+function Fr(e, t, n) {
+	let r = Y(e, t), i = K(X(e, t)), a = Math.sin(i) * r, o = Math.cos(i) * r, s = K(n);
 	return {
 		x: a * Math.sin(s) + o * Math.cos(s),
 		y: a * Math.cos(s) - o * Math.sin(s)
 	};
 }
 function Z(e, t, n, r) {
-	let i = Y(r), a = t * Math.sin(i) + n * Math.cos(i), o = t * Math.cos(i) - n * Math.sin(i), s = Math.hypot(a, o);
+	let i = K(r), a = t * Math.sin(i) + n * Math.cos(i), o = t * Math.cos(i) - n * Math.sin(i), s = Math.hypot(a, o);
 	if (s < 1e-6) return [e[0], e[1]];
-	let c = (jr(Math.atan2(a, o)) + 360) % 360;
-	return Mr(e[0], e[1], s, c);
+	let c = q(Pr(Math.atan2(a, o)));
+	return J(e[0], e[1], s, c);
 }
-function Fr(e, t) {
+function Ir(e, t) {
 	let n = 10 ** t;
 	return Math.round(e * n) / n;
 }
-function Ir(e, t) {
-	return [Fr(e[0], t), Fr(e[1], t)];
+function Lr(e, t) {
+	return [Ir(e[0], t), Ir(e[1], t)];
 }
 function Q(e) {
 	let t = typeof e == "number" ? e : typeof e == "string" ? Number(e) : NaN;
 	return Number.isFinite(t) ? t : null;
 }
-function Lr(e) {
+function Rr(e) {
 	if (Array.isArray(e) && e.length >= 2) {
 		let t = Q(e[0]), n = Q(e[1]);
 		return t == null || n == null ? null : [t, n];
@@ -8977,28 +8982,59 @@ function Lr(e) {
 	}
 	return null;
 }
-function Rr(e) {
+function zr(e) {
 	return `${e[0]},${e[1]}`;
 }
-function zr(e) {
+function Br(e) {
+	return e === "clockwise" || e === "anticlockwise" ? e : null;
+}
+function Vr(e) {
 	if (e.geometry?.type !== "Polygon") return null;
 	let t = e.geometry.coordinates;
 	if (!Array.isArray(t) || !Array.isArray(t[0])) return null;
 	let n = t[0].filter((e) => Array.isArray(e) && Q(e[0]) != null && Q(e[1]) != null);
 	return n.length < 4 ? null : n.map((e) => [Number(e[0]), Number(e[1])]);
 }
-function Br(e) {
+function Hr(e) {
 	let t = e[e.length - 1], n = e[0];
 	return t && n && t[0] === n[0] && t[1] === n[1] ? e.slice(0, -1) : e;
 }
-function Vr(e) {
-	let t = Br(e);
+function Ur(e) {
+	let t = Hr(e);
 	if (!t.length) return null;
 	let n = 0, r = 0;
 	for (let e of t) n += e[0], r += e[1];
 	return [n / t.length, r / t.length];
 }
-function Hr(e, t = 64, n = 9) {
+function Wr(e = 0) {
+	return {
+		innerRadiusMeters: 0,
+		startBearing: 0,
+		endBearing: 0,
+		arcDirection: "clockwise",
+		xSemiAxis: e,
+		ySemiAxis: e,
+		angle: 0
+	};
+}
+function Gr(e, t, n) {
+	let r = q(e), i = q(t);
+	return n === "anticlockwise" ? (i - r + 360) % 360 || 0 : (r - i + 360) % 360 || 0;
+}
+function Kr(e, t, n, r) {
+	let i = q(e), a = q(t), o = q(n), s = Gr(i, a, r);
+	return s < 1e-9 ? Math.abs(o - i) < 1e-6 || Math.abs(o - i - 360) < 1e-6 : (r === "anticlockwise" ? (o - i + 360) % 360 : (i - o + 360) % 360) <= s + 1e-6;
+}
+function qr(e, t, n) {
+	let r = Kr(e, t, n, "clockwise"), i = Kr(e, t, n, "anticlockwise");
+	return r && !i ? "clockwise" : i && !r ? "anticlockwise" : Gr(e, t, "clockwise") <= Gr(e, t, "anticlockwise") ? "clockwise" : "anticlockwise";
+}
+function Jr(e, t, n, r, i, a = 64, o = 9) {
+	let s = q(n), c = Gr(s, r, i), l = Math.max(1, Math.round(Math.max(8, a) * (c <= 1e-9 ? 1 : c / 360))), u = c <= 1e-9 ? 0 : (i === "anticlockwise" ? 1 : -1) * c / l, d = [];
+	for (let n = 0; n <= l; n += 1) d.push(Lr(J(e[0], e[1], t, s + n * u), o));
+	return d;
+}
+function Yr(e, t = 64, n = 9) {
 	let r = Math.max(8, Math.round(t)), i = [];
 	if (e.mode === "rectangle" || e.mode === "angled-rectangle") {
 		let t = e.xSemiAxis, r = e.ySemiAxis, a = [
@@ -9007,19 +9043,40 @@ function Hr(e, t = 64, n = 9) {
 			[t, r],
 			[-t, r]
 		];
-		for (let [t, r] of a) i.push(Ir(Z(e.center, t, r, e.angle), n));
+		for (let [t, r] of a) i.push(Lr(Z(e.center, t, r, e.angle), n));
 	} else if (e.mode === "circle") for (let t = 0; t < r; t += 1) {
 		let a = -t * 360 / r;
-		i.push(Ir(Mr(e.center[0], e.center[1], e.radiusMeters, a), n));
+		i.push(Lr(J(e.center[0], e.center[1], e.radiusMeters, a), n));
 	}
-	else for (let t = 0; t < r; t += 1) {
+	else if (e.mode === "sector") {
+		let r = Lr(e.center, n);
+		i.push(r);
+		let a = Jr(e.center, e.radiusMeters, e.startBearing, e.endBearing, e.arcDirection, t, n);
+		for (let e of a) {
+			let t = i[i.length - 1];
+			t && t[0] === e[0] && t[1] === e[1] || i.push(e);
+		}
+		return i.push([r[0], r[1]]), i;
+	} else if (e.mode === "sensor") {
+		let r = Jr(e.center, e.radiusMeters, e.startBearing, e.endBearing, e.arcDirection, t, n), a = Jr(e.center, e.innerRadiusMeters, e.endBearing, e.startBearing, e.arcDirection === "clockwise" ? "anticlockwise" : "clockwise", t, n);
+		for (let e of r) {
+			let t = i[i.length - 1];
+			t && t[0] === e[0] && t[1] === e[1] || i.push(e);
+		}
+		for (let e of a) {
+			let t = i[i.length - 1];
+			t && t[0] === e[0] && t[1] === e[1] || i.push(e);
+		}
+		let o = i[0];
+		return o && i.push([o[0], o[1]]), i;
+	} else for (let t = 0; t < r; t += 1) {
 		let a = t / r * Math.PI * 2, o = e.xSemiAxis * Math.cos(a), s = -e.ySemiAxis * Math.sin(a);
-		i.push(Ir(Z(e.center, o, s, e.angle), n));
+		i.push(Lr(Z(e.center, o, s, e.angle), n));
 	}
 	let a = i[0];
 	return a && i.push([a[0], a[1]]), i;
 }
-function Ur(e) {
+function Xr(e) {
 	return e === "circle" ? [
 		"center",
 		"rim",
@@ -9032,6 +9089,16 @@ function Ur(e) {
 		"xy-neg",
 		"x-neg-y",
 		"x-neg-y-neg"
+	] : e === "sector" ? [
+		"center",
+		"start",
+		"end"
+	] : e === "sensor" ? [
+		"center",
+		"outer-start",
+		"outer-end",
+		"inner-start",
+		"inner-end"
 	] : [
 		"center",
 		"x",
@@ -9040,7 +9107,7 @@ function Ur(e) {
 		"y-neg"
 	];
 }
-function Wr(e) {
+function Zr(e) {
 	return e === "xy" ? {
 		x: 1,
 		y: 1
@@ -9055,13 +9122,13 @@ function Wr(e) {
 		y: -1
 	} : null;
 }
-function Gr(e) {
+function Qr(e) {
 	if (e.mode === "circle") return [
 		e.center,
-		Mr(e.center[0], e.center[1], e.radiusMeters, 45),
-		Mr(e.center[0], e.center[1], e.radiusMeters, 135),
-		Mr(e.center[0], e.center[1], e.radiusMeters, 225),
-		Mr(e.center[0], e.center[1], e.radiusMeters, 315)
+		J(e.center[0], e.center[1], e.radiusMeters, 45),
+		J(e.center[0], e.center[1], e.radiusMeters, 135),
+		J(e.center[0], e.center[1], e.radiusMeters, 225),
+		J(e.center[0], e.center[1], e.radiusMeters, 315)
 	];
 	if (e.mode === "rectangle" || e.mode === "angled-rectangle") {
 		let { center: t, xSemiAxis: n, ySemiAxis: r, angle: i } = e;
@@ -9073,7 +9140,17 @@ function Gr(e) {
 			Z(t, -n, -r, i)
 		];
 	}
-	return [
+	return e.mode === "sector" ? [
+		e.center,
+		J(e.center[0], e.center[1], e.radiusMeters, e.startBearing),
+		J(e.center[0], e.center[1], e.radiusMeters, e.endBearing)
+	] : e.mode === "sensor" ? [
+		e.center,
+		J(e.center[0], e.center[1], e.radiusMeters, e.startBearing),
+		J(e.center[0], e.center[1], e.radiusMeters, e.endBearing),
+		J(e.center[0], e.center[1], e.innerRadiusMeters, e.startBearing),
+		J(e.center[0], e.center[1], e.innerRadiusMeters, e.endBearing)
+	] : [
 		e.center,
 		Z(e.center, e.xSemiAxis, 0, e.angle),
 		Z(e.center, -e.xSemiAxis, 0, e.angle),
@@ -9081,64 +9158,114 @@ function Gr(e) {
 		Z(e.center, 0, -e.ySemiAxis, e.angle)
 	];
 }
-function Kr(e, t) {
-	let n = Br(t);
+function $r(e, t) {
+	let n = Hr(t);
 	if (n.length < 4) return null;
 	let [r, i, a] = n;
 	if (!r || !i || !a) return null;
 	if (e === "rectangle") {
-		let t = n.slice(0, 4).map((e) => e[0]), r = n.slice(0, 4).map((e) => e[1]), i = [(Math.min(...t) + Math.max(...t)) / 2, (Math.min(...r) + Math.max(...r)) / 2], a = X(i, [i[0], Math.max(...r)]), o = X(i, [Math.max(...t), i[1]]);
-		return a < q || o < q ? null : {
+		let t = n.slice(0, 4).map((e) => e[0]), r = n.slice(0, 4).map((e) => e[1]), i = [(Math.min(...t) + Math.max(...t)) / 2, (Math.min(...r) + Math.max(...r)) / 2], a = Y(i, [i[0], Math.max(...r)]), o = Y(i, [Math.max(...t), i[1]]);
+		return a < G || o < G ? null : {
 			mode: e,
 			center: i,
 			radiusMeters: 0,
+			...Wr(),
 			xSemiAxis: a,
 			ySemiAxis: o,
 			angle: 0
 		};
 	}
-	let o = [(r[0] + a[0]) / 2, (r[1] + a[1]) / 2], s = X(r, i) / 2, c = X(i, a) / 2;
-	return s < q || c < q ? null : {
+	let o = [(r[0] + a[0]) / 2, (r[1] + a[1]) / 2], s = Y(r, i) / 2, c = Y(i, a) / 2;
+	return s < G || c < G ? null : {
 		mode: e,
 		center: o,
 		radiusMeters: 0,
+		...Wr(),
 		xSemiAxis: s,
 		ySemiAxis: c,
-		angle: Nr(r, i)
+		angle: X(r, i)
 	};
 }
-function qr(e) {
+function ei(e) {
+	let t = Hr(e);
+	if (t.length < 3) return null;
+	let n = t[0], r = t[1], i = t[t.length - 1];
+	if (!n || !r || !i) return null;
+	let a = Y(n, r);
+	if (a < G) return null;
+	let o = X(n, r), s = X(n, i), c = t[Math.floor(t.length / 2)], l = c ? X(n, c) : o;
+	return {
+		mode: "sector",
+		center: n,
+		radiusMeters: a,
+		...Wr(a),
+		startBearing: o,
+		endBearing: s,
+		arcDirection: qr(o, s, l)
+	};
+}
+function ti(e, t, n) {
+	let r = Rr(t.properties?.center), i = Q(t.properties?.radiusKilometers), a = Q(t.properties?.innerRadiusKilometers), o = Q(t.properties?.startBearing), s = Q(t.properties?.endBearing), c = Br(t.properties?.arcDirection);
+	if (r && i != null && i > 0 && o != null && s != null && c) {
+		let t = i * 1e3, n = e === "sensor" && a != null && a > 0 ? a * 1e3 : 0;
+		return e === "sensor" && (n = Math.min(Math.max(G, n), Math.max(G, t - G))), {
+			mode: e,
+			center: r,
+			radiusMeters: t,
+			...Wr(t),
+			innerRadiusMeters: e === "sensor" ? n : 0,
+			startBearing: q(o),
+			endBearing: q(s),
+			arcDirection: c
+		};
+	}
+	return e === "sector" && n ? ei(n) : null;
+}
+function ni(e) {
 	let t = e.properties?.mode;
-	if (!J(t)) return null;
-	let n = zr(e), r = Lr(e.properties?.center);
+	if (!Nr(t)) return null;
+	let n = Vr(e), r = Rr(e.properties?.center);
 	if (t === "circle") {
-		let i = Q(e.properties?.radiusKilometers), a = r || (n ? Vr(n) : null);
+		let i = Q(e.properties?.radiusKilometers), a = r || (n ? Ur(n) : null);
 		if (!a) return null;
 		let o = i != null && i > 0 ? i * 1e3 : 0;
-		if (o <= 0 && n) for (let e of Br(n)) o = Math.max(o, X(a, e));
-		return o < q ? null : {
+		if (o <= 0 && n) for (let e of Hr(n)) o = Math.max(o, Y(a, e));
+		return o < G ? null : {
 			mode: t,
 			center: a,
 			radiusMeters: o,
-			xSemiAxis: o,
-			ySemiAxis: o,
-			angle: 0
+			...Wr(o)
 		};
 	}
+	if (t === "sector" || t === "sensor") return ti(t, e, n);
 	let i = Q(e.properties?.xSemiAxis), a = Q(e.properties?.ySemiAxis), o = Q(e.properties?.angle);
-	return r && i != null && a != null && i >= q && a >= q ? {
+	return r && i != null && a != null && i >= G && a >= G ? {
 		mode: t,
 		center: r,
 		radiusMeters: 0,
+		...Wr(),
 		xSemiAxis: i,
 		ySemiAxis: a,
 		angle: t === "rectangle" ? 0 : o ?? 0
-	} : t === "ellipse" || !n ? null : Kr(t, n);
+	} : t === "ellipse" || !n ? null : $r(t, n);
 }
-function Jr(e) {
+function ri(e) {
 	return e.mode === "circle" ? {
 		center: e.center,
 		radiusKilometers: e.radiusMeters / 1e3
+	} : e.mode === "sector" ? {
+		center: e.center,
+		radiusKilometers: e.radiusMeters / 1e3,
+		startBearing: q(e.startBearing),
+		endBearing: q(e.endBearing),
+		arcDirection: e.arcDirection
+	} : e.mode === "sensor" ? {
+		center: e.center,
+		radiusKilometers: e.radiusMeters / 1e3,
+		innerRadiusKilometers: e.innerRadiusMeters / 1e3,
+		startBearing: q(e.startBearing),
+		endBearing: q(e.endBearing),
+		arcDirection: e.arcDirection
 	} : {
 		center: e.center,
 		xSemiAxis: e.xSemiAxis,
@@ -9146,7 +9273,7 @@ function Jr(e) {
 		angle: e.mode === "rectangle" ? 0 : e.angle
 	};
 }
-function Yr(e, t, n, r) {
+function ii(e, t, n, r) {
 	if (t === "center") {
 		let t = r ?? {
 			center: e.center,
@@ -9158,7 +9285,7 @@ function Yr(e, t, n, r) {
 		};
 	}
 	if (e.mode === "circle" || t === "rim") {
-		let t = Math.max(q, X(e.center, n));
+		let t = Math.max(G, Y(e.center, n));
 		return {
 			...e,
 			radiusMeters: t,
@@ -9166,9 +9293,43 @@ function Yr(e, t, n, r) {
 			ySemiAxis: t
 		};
 	}
-	let i = e.mode === "rectangle" || e.mode === "angled-rectangle", a = Wr(t);
+	if (e.mode === "sector" && (t === "start" || t === "end")) {
+		let r = Math.max(G, Y(e.center, n)), i = X(e.center, n);
+		return {
+			...e,
+			radiusMeters: r,
+			xSemiAxis: r,
+			ySemiAxis: r,
+			startBearing: t === "start" ? i : e.startBearing,
+			endBearing: t === "end" ? i : e.endBearing
+		};
+	}
+	if (e.mode === "sensor") {
+		let r = X(e.center, n), i = Math.max(G, Y(e.center, n));
+		if (t === "outer-start" || t === "outer-end") {
+			let n = Math.max(i, e.innerRadiusMeters + G);
+			return {
+				...e,
+				radiusMeters: n,
+				xSemiAxis: n,
+				ySemiAxis: n,
+				startBearing: t === "outer-start" ? r : e.startBearing,
+				endBearing: t === "outer-end" ? r : e.endBearing
+			};
+		}
+		if (t === "inner-start" || t === "inner-end") {
+			let n = Math.min(Math.max(G, i), Math.max(G, e.radiusMeters - G));
+			return {
+				...e,
+				innerRadiusMeters: n,
+				startBearing: t === "inner-start" ? r : e.startBearing,
+				endBearing: t === "inner-end" ? r : e.endBearing
+			};
+		}
+	}
+	let i = e.mode === "rectangle" || e.mode === "angled-rectangle", a = Zr(t);
 	if (i && a) {
-		let t = Z(e.center, -a.x * e.xSemiAxis, -a.y * e.ySemiAxis, e.angle), r = Pr(t, n, e.angle), i = Math.abs(r.x) < q ? (r.x < 0 ? -1 : 1) * q : r.x, o = Math.abs(r.y) < q ? (r.y < 0 ? -1 : 1) * q : r.y, s = {
+		let t = Z(e.center, -a.x * e.xSemiAxis, -a.y * e.ySemiAxis, e.angle), r = Fr(t, n, e.angle), i = Math.abs(r.x) < G ? (r.x < 0 ? -1 : 1) * G : r.x, o = Math.abs(r.y) < G ? (r.y < 0 ? -1 : 1) * G : r.y, s = {
 			...e,
 			center: Z(t, i / 2, o / 2, e.angle),
 			xSemiAxis: Math.abs(i) / 2,
@@ -9177,38 +9338,38 @@ function Yr(e, t, n, r) {
 		return s.mode === "rectangle" && (s.angle = 0), s;
 	}
 	if (e.mode === "ellipse" && (t === "x" || t === "x-neg" || t === "y" || t === "y-neg")) {
-		let r = Math.max(q, X(e.center, n)), i = Nr(e.center, n), a = (e) => (e + 360) % 360;
+		let r = Math.max(G, Y(e.center, n)), i = X(e.center, n);
 		return t === "x" || t === "x-neg" ? {
 			...e,
 			xSemiAxis: r,
-			angle: a(t === "x" ? i : i + 180)
+			angle: q(t === "x" ? i : i + 180)
 		} : {
 			...e,
 			ySemiAxis: r,
-			angle: a(t === "y" ? i - 90 : i + 90)
+			angle: q(t === "y" ? i - 90 : i + 90)
 		};
 	}
-	let o = Pr(e.center, n, e.angle), s = { ...e };
-	return (t === "x" || t === "x-neg") && (s.xSemiAxis = Math.max(q, Math.abs(o.x))), (t === "y" || t === "y-neg") && (s.ySemiAxis = Math.max(q, Math.abs(o.y))), s;
+	let o = Fr(e.center, n, e.angle), s = { ...e };
+	return (t === "x" || t === "x-neg") && (s.xSemiAxis = Math.max(G, Math.abs(o.x))), (t === "y" || t === "y-neg") && (s.ySemiAxis = Math.max(G, Math.abs(o.y))), s;
 }
-function Xr(e, t) {
-	let n = qr(e);
+function ai(e, t) {
+	let n = ni(e);
 	if (!n || e.geometry?.type !== "Polygon") return e;
 	let r = t?.steps ?? 64, i = t?.precision ?? 9;
 	return {
 		...e,
 		geometry: {
 			type: "Polygon",
-			coordinates: [Hr(n, r, i)]
+			coordinates: [Yr(n, r, i)]
 		},
 		properties: {
 			...e.properties || {},
-			...Jr(n)
+			...ri(n)
 		}
 	};
 }
 // src/lib/modes/TerraDrawShapeEllipseMode.ts
-var Zr = class extends Ne {
+var oi = class extends Ne {
 	mode = "ellipse";
 	phase = "idle";
 	origin = null;
@@ -9268,9 +9429,9 @@ var Zr = class extends Ne {
 			return;
 		}
 		if (this.phase === "axis") {
-			let e = X(this.origin, t);
+			let e = Y(this.origin, t);
 			if (e < 1) return;
-			this.xSemiAxis = e, this.ySemiAxis = e, this.angle = Nr(this.origin, t), this.phase = "depth", this.write("commit", !0);
+			this.xSemiAxis = e, this.ySemiAxis = e, this.angle = X(this.origin, t), this.phase = "depth", this.write("commit", !0);
 			return;
 		}
 		if (this.captureDepth(t), this.ySemiAxis < 1) return;
@@ -9284,15 +9445,15 @@ var Zr = class extends Ne {
 		if (!this.origin || this.phase === "idle") return;
 		let t = [e.lng, e.lat];
 		if (this.phase === "axis") {
-			let e = X(this.origin, t);
+			let e = Y(this.origin, t);
 			if (e < 1) return;
-			this.xSemiAxis = e, this.ySemiAxis = e, this.angle = Nr(this.origin, t);
+			this.xSemiAxis = e, this.ySemiAxis = e, this.angle = X(this.origin, t);
 		} else this.captureDepth(t);
 		this.write("commit", !0);
 	}
 	captureDepth(e) {
 		if (!this.origin) return;
-		let t = Pr(this.origin, e, this.angle);
+		let t = Fr(this.origin, e, this.angle);
 		this.ySemiAxis = Math.max(1, Math.abs(t.y));
 	}
 	params() {
@@ -9300,6 +9461,10 @@ var Zr = class extends Ne {
 			mode: "ellipse",
 			center: this.origin,
 			radiusMeters: 0,
+			innerRadiusMeters: 0,
+			startBearing: 0,
+			endBearing: 0,
+			arcDirection: "clockwise",
 			xSemiAxis: this.xSemiAxis,
 			ySemiAxis: this.ySemiAxis,
 			angle: this.angle
@@ -9308,7 +9473,7 @@ var Zr = class extends Ne {
 	write(e, t) {
 		let n = this.params(), r = this;
 		if (!n || !r.mutateFeature) return;
-		let i = r.coordinatePrecision ?? 9, a = Hr(n, this.steps, i), o = {
+		let i = r.coordinatePrecision ?? 9, a = Yr(n, this.steps, i), o = {
 			mode: this.mode,
 			center: n.center,
 			xSemiAxis: n.xSemiAxis,
@@ -9337,7 +9502,296 @@ var Zr = class extends Ne {
 		let e = this;
 		this.currentId != null && e.mutateFeature?.deleteFeaturesIfPresent([this.currentId]), this.currentId = null, this.origin = null, this.phase = "idle", this.state === "drawing" && this.setStarted();
 	}
-}, Qr = class extends Qt {
+};
+// src/lib/modes/TerraDrawShapeSectorMode.ts
+function si(e, t) {
+	let n = e * Math.PI / 180, r = t * Math.PI / 180;
+	return Math.sin(n) * Math.cos(r) - Math.cos(n) * Math.sin(r) < 0 ? "anticlockwise" : "clockwise";
+}
+var ci = class extends Ne {
+	mode = "sector";
+	phase = "idle";
+	origin = null;
+	radiusMeters = 0;
+	startBearing = 0;
+	endBearing = 0;
+	arcDirection = "clockwise";
+	directionSet = !1;
+	currentId = null;
+	steps;
+	constructor(e) {
+		let t = Math.trunc(e?.segments ?? 64);
+		super({
+			styles: e?.styles ?? {},
+			segments: t >= 8 ? t : 64
+		}), this.steps = t >= 8 ? t : 64;
+	}
+	styleFeature(e) {
+		return {
+			pointColor: "#3f97e0",
+			pointWidth: 0,
+			pointOutlineColor: "#ffffff",
+			pointOutlineWidth: 0,
+			polygonFillColor: this.getHexColorStylingValue(this.styles.fillColor, "#3f97e0", e),
+			polygonFillOpacity: this.getNumericStylingValue(this.styles.fillOpacity, .3, e),
+			polygonOutlineColor: this.getHexColorStylingValue(this.styles.outlineColor, "#3f97e0", e),
+			polygonOutlineWidth: this.getNumericStylingValue(this.styles.outlineWidth, 4, e),
+			polygonOutlineOpacity: this.getNumericStylingValue(this.styles.outlineOpacity, 1, e),
+			lineStringColor: "#3f97e0",
+			lineStringWidth: 0,
+			zIndex: 0
+		};
+	}
+	onDragStart() {}
+	onDrag() {}
+	onDragEnd() {}
+	afterFeatureAdded() {}
+	afterFeatureUpdated() {}
+	validateFeature() {
+		return { valid: !0 };
+	}
+	start() {
+		this.setStarted(), this.setCursor("crosshair");
+	}
+	stop() {
+		this.cleanUp(), this.setStopped(), this.setCursor("unset");
+	}
+	cleanUp() {
+		this.discard();
+	}
+	onKeyUp(e) {
+		e.key === "Escape" && this.discard();
+	}
+	onClick(e) {
+		if (e.button !== "left") return;
+		let t = [e.lng, e.lat];
+		if (this.phase === "idle" || !this.origin) {
+			this.origin = t, this.radiusMeters = 1, this.startBearing = 0, this.endBearing = 1, this.arcDirection = "anticlockwise", this.directionSet = !1, this.phase = "radius", this.write("commit", !0), this.setDrawing();
+			return;
+		}
+		if (this.phase === "radius") {
+			let e = Y(this.origin, t);
+			if (e < 1) return;
+			this.radiusMeters = e, this.startBearing = X(this.origin, t), this.endBearing = this.startBearing, this.directionSet = !1, this.phase = "sweep", this.write("commit", !0);
+			return;
+		}
+		if (this.captureSweep(t), this.radiusMeters < 1) return;
+		let n = this.currentId;
+		this.write("finish", !1), this.phase = "idle", this.origin = null, this.currentId = null, this.setStarted(), n != null && this.onFinish(n, {
+			mode: this.mode,
+			action: "draw"
+		});
+	}
+	onMouseMove(e) {
+		if (!this.origin || this.phase === "idle") return;
+		let t = [e.lng, e.lat];
+		if (this.phase === "radius") {
+			let e = Y(this.origin, t);
+			if (e < 1) return;
+			this.radiusMeters = e, this.startBearing = X(this.origin, t), this.endBearing = this.startBearing;
+		} else this.captureSweep(t);
+		this.write("commit", !0);
+	}
+	captureSweep(e) {
+		this.origin && (this.endBearing = X(this.origin, e), !this.directionSet && Math.abs(this.endBearing - this.startBearing) > .001 && (this.arcDirection = si(this.startBearing, this.endBearing), this.directionSet = !0), Math.abs(this.startBearing - this.endBearing) < 1e-6 && (this.endBearing = (this.startBearing + 1) % 360, this.arcDirection = "anticlockwise", this.directionSet = !0));
+	}
+	params() {
+		return this.origin ? {
+			mode: "sector",
+			center: this.origin,
+			radiusMeters: this.radiusMeters,
+			innerRadiusMeters: 0,
+			startBearing: this.startBearing,
+			endBearing: this.endBearing,
+			arcDirection: this.arcDirection,
+			xSemiAxis: this.radiusMeters,
+			ySemiAxis: this.radiusMeters,
+			angle: 0
+		} : null;
+	}
+	write(e, t) {
+		let n = this.params(), r = this;
+		if (!n || !r.mutateFeature) return;
+		let i = r.coordinatePrecision ?? 9, a = Yr(n, this.steps, i), o = {
+			mode: this.mode,
+			...ri(n),
+			currentlyDrawing: t
+		};
+		if (this.currentId == null) {
+			let e = r.mutateFeature.createPolygon({
+				coordinates: a,
+				properties: o
+			});
+			if (!e) return;
+			this.currentId = e.id;
+		} else r.mutateFeature.updatePolygon({
+			featureId: this.currentId,
+			coordinateMutations: {
+				type: "replace",
+				coordinates: [a]
+			},
+			propertyMutations: o,
+			context: { updateType: e }
+		});
+	}
+	discard() {
+		let e = this;
+		this.currentId != null && e.mutateFeature?.deleteFeaturesIfPresent([this.currentId]), this.currentId = null, this.origin = null, this.phase = "idle", this.directionSet = !1, this.state === "drawing" && this.setStarted();
+	}
+};
+// src/lib/modes/TerraDrawShapeSensorMode.ts
+function li(e, t) {
+	let n = e * Math.PI / 180, r = t * Math.PI / 180;
+	return Math.sin(n) * Math.cos(r) - Math.cos(n) * Math.sin(r) < 0 ? "anticlockwise" : "clockwise";
+}
+function ui(e, t, n, r) {
+	let i = q(e), a = q(t), o = q(n), s = Gr(i, a, r);
+	return s < 1e-9 ? Math.abs(o - i) < 1e-6 : (r === "anticlockwise" ? (o - i + 360) % 360 : (i - o + 360) % 360) <= s + 1e-6;
+}
+var di = class extends Ne {
+	mode = "sensor";
+	phase = "idle";
+	origin = null;
+	radiusMeters = 0;
+	innerRadiusMeters = 0;
+	startBearing = 0;
+	endBearing = 0;
+	arcDirection = "clockwise";
+	directionSet = !1;
+	currentId = null;
+	steps;
+	constructor(e) {
+		let t = Math.trunc(e?.segments ?? 64);
+		super({
+			styles: e?.styles ?? {},
+			segments: t >= 8 ? t : 64
+		}), this.steps = t >= 8 ? t : 64;
+	}
+	styleFeature(e) {
+		return {
+			pointColor: "#3f97e0",
+			pointWidth: 0,
+			pointOutlineColor: "#ffffff",
+			pointOutlineWidth: 0,
+			polygonFillColor: this.getHexColorStylingValue(this.styles.fillColor, "#3f97e0", e),
+			polygonFillOpacity: this.getNumericStylingValue(this.styles.fillOpacity, .3, e),
+			polygonOutlineColor: this.getHexColorStylingValue(this.styles.outlineColor, "#3f97e0", e),
+			polygonOutlineWidth: this.getNumericStylingValue(this.styles.outlineWidth, 4, e),
+			polygonOutlineOpacity: this.getNumericStylingValue(this.styles.outlineOpacity, 1, e),
+			lineStringColor: "#3f97e0",
+			lineStringWidth: 0,
+			zIndex: 0
+		};
+	}
+	onDragStart() {}
+	onDrag() {}
+	onDragEnd() {}
+	afterFeatureAdded() {}
+	afterFeatureUpdated() {}
+	validateFeature() {
+		return { valid: !0 };
+	}
+	start() {
+		this.setStarted(), this.setCursor("crosshair");
+	}
+	stop() {
+		this.cleanUp(), this.setStopped(), this.setCursor("unset");
+	}
+	cleanUp() {
+		this.discard();
+	}
+	onKeyUp(e) {
+		e.key === "Escape" && this.discard();
+	}
+	onClick(e) {
+		if (e.button !== "left") return;
+		let t = [e.lng, e.lat];
+		if (this.phase === "idle" || !this.origin) {
+			this.origin = t, this.innerRadiusMeters = 1, this.radiusMeters = 1.5, this.startBearing = 0, this.endBearing = 1, this.arcDirection = "anticlockwise", this.directionSet = !1, this.phase = "inner", this.write("commit", !0), this.setDrawing();
+			return;
+		}
+		if (this.phase === "inner") {
+			let e = Y(this.origin, t);
+			if (e < 1) return;
+			this.innerRadiusMeters = e, this.radiusMeters = Math.max(e * 1.5, e + 1), this.startBearing = X(this.origin, t), this.endBearing = this.startBearing, this.directionSet = !1, this.phase = "sweep", this.write("commit", !0);
+			return;
+		}
+		if (this.phase === "sweep") {
+			if (this.captureSweep(t), Gr(this.startBearing, this.endBearing, this.arcDirection) < 1) return;
+			this.phase = "outer", this.write("commit", !0);
+			return;
+		}
+		if (!this.captureOuter(t)) return;
+		let n = this.currentId;
+		this.write("finish", !1), this.phase = "idle", this.origin = null, this.currentId = null, this.setStarted(), n != null && this.onFinish(n, {
+			mode: this.mode,
+			action: "draw"
+		});
+	}
+	onMouseMove(e) {
+		if (!this.origin || this.phase === "idle") return;
+		let t = [e.lng, e.lat];
+		if (this.phase === "inner") {
+			let e = Y(this.origin, t);
+			if (e < 1) return;
+			this.innerRadiusMeters = e, this.radiusMeters = Math.max(e * 1.5, e + 1), this.startBearing = X(this.origin, t), this.endBearing = this.startBearing;
+		} else this.phase === "sweep" ? this.captureSweep(t) : this.captureOuter(t);
+		this.write("commit", !0);
+	}
+	captureSweep(e) {
+		this.origin && (this.endBearing = X(this.origin, e), !this.directionSet && Math.abs(this.endBearing - this.startBearing) > .001 && (this.arcDirection = li(this.startBearing, this.endBearing), this.directionSet = !0), Math.abs(this.startBearing - this.endBearing) < 1e-6 && (this.endBearing = (this.startBearing + 1) % 360, this.arcDirection = "anticlockwise", this.directionSet = !0));
+	}
+	captureOuter(e) {
+		if (!this.origin) return !1;
+		let t = X(this.origin, e);
+		if (!ui(this.startBearing, this.endBearing, t, this.arcDirection)) return !1;
+		let n = Y(this.origin, e);
+		return this.radiusMeters = Math.max(n, this.innerRadiusMeters + 1), this.radiusMeters > this.innerRadiusMeters;
+	}
+	params() {
+		return this.origin ? {
+			mode: "sensor",
+			center: this.origin,
+			radiusMeters: this.radiusMeters,
+			innerRadiusMeters: this.innerRadiusMeters,
+			startBearing: this.startBearing,
+			endBearing: this.endBearing,
+			arcDirection: this.arcDirection,
+			xSemiAxis: this.radiusMeters,
+			ySemiAxis: this.radiusMeters,
+			angle: 0
+		} : null;
+	}
+	write(e, t) {
+		let n = this.params(), r = this;
+		if (!n || !r.mutateFeature) return;
+		let i = r.coordinatePrecision ?? 9, a = Yr(n, this.steps, i), o = {
+			mode: this.mode,
+			...ri(n),
+			currentlyDrawing: t
+		};
+		if (this.currentId == null) {
+			let e = r.mutateFeature.createPolygon({
+				coordinates: a,
+				properties: o
+			});
+			if (!e) return;
+			this.currentId = e.id;
+		} else r.mutateFeature.updatePolygon({
+			featureId: this.currentId,
+			coordinateMutations: {
+				type: "replace",
+				coordinates: [a]
+			},
+			propertyMutations: o,
+			context: { updateType: e }
+		});
+	}
+	discard() {
+		let e = this;
+		this.currentId != null && e.mutateFeature?.deleteFeaturesIfPresent([this.currentId]), this.currentId = null, this.origin = null, this.phase = "idle", this.directionSet = !1, this.state === "drawing" && this.setStarted();
+	}
+}, fi = class extends Qt {
 	shapeHandles = {
 		featureId: null,
 		ids: []
@@ -9353,14 +9807,14 @@ var Zr = class extends Ne {
 			return n.bind(this);
 		}, r = n("select"), i = n("deselect"), a = n("deleteSelected"), o = this;
 		o.select = (e, t) => {
-			let n = this.modeOf(e), i = n ? o.flags?.[n] : void 0, a = !!(i?.feature && Object.prototype.hasOwnProperty.call(i.feature, "coordinates")), s = i?.feature?.coordinates;
-			i?.feature && J(n) && delete i.feature.coordinates;
+			let n = this.modeOf(e), i = n ? o.flags?.[n] : void 0, a = !!(i?.feature && Object.prototype.hasOwnProperty.call(i.feature, "coordinates")), s = i?.feature?.coordinates, c = this.usesShapeHandles(e);
+			i?.feature && c && delete i.feature.coordinates;
 			try {
 				r(e, t);
 			} finally {
 				a && i?.feature && (i.feature.coordinates = s);
 			}
-			o.selected[0] === e && J(n) && (o.selectionPoints?.delete(), o.midPoints?.delete(), this.syncShapeHandles(e));
+			o.selected[0] === e && c && (o.selectionPoints?.delete(), o.midPoints?.delete(), this.syncShapeHandles(e));
 		}, o.deselect = (e) => {
 			this.clearShapeHandles(), i(e);
 		}, o.deleteSelected = () => {
@@ -9378,11 +9832,11 @@ var Zr = class extends Ne {
 		}, e.length && this.host().mutateFeature?.deleteFeaturesIfPresent(e);
 	}
 	afterFeatureUpdated(e) {
-		J(e?.properties?.mode) && e.id != null && e.id === this.host().selected?.[0] ? this.shapeDrag || this.syncShapeHandles(e.id) : super.afterFeatureUpdated(e);
+		e.id != null && e.id === this.host().selected?.[0] && this.usesShapeHandles(e.id) ? this.shapeDrag || this.syncShapeHandles(e.id) : super.afterFeatureUpdated(e);
 	}
 	onDragStart(e, t) {
 		let n = this.host(), r = n.selected?.[0];
-		if (r == null || !J(this.modeOf(r))) {
+		if (r == null || !this.usesShapeHandles(r)) {
 			super.onDragStart(e, t);
 			return;
 		}
@@ -9400,10 +9854,10 @@ var Zr = class extends Ne {
 	}
 	onDrag(e, t) {
 		let n = this.host(), r = n.selected?.[0];
-		if (r == null || !J(this.modeOf(r))) super.onDrag(e, t);
+		if (r == null || !this.usesShapeHandles(r)) super.onDrag(e, t);
 		else if (n.dragEventCount += 1, !(n.dragEventThrottle > 1 && n.dragEventCount % n.dragEventThrottle === 0)) {
 			if (this.shapeDrag && this.shapeDrag.featureId === r) {
-				let n = Yr(this.shapeDrag.origin, this.shapeDrag.role, [e.lng, e.lat], {
+				let n = ii(this.shapeDrag.origin, this.shapeDrag.role, [e.lng, e.lat], {
 					center: this.shapeDrag.origin.center,
 					pointer: this.shapeDrag.originPointer
 				});
@@ -9413,9 +9867,9 @@ var Zr = class extends Ne {
 	}
 	onDragEnd(e, t) {
 		let n = this.host(), r = n.selected?.[0];
-		if (r == null || !J(this.modeOf(r))) super.onDragEnd(e, t);
+		if (r == null || !this.usesShapeHandles(r)) super.onDragEnd(e, t);
 		else if (this.shapeDrag) {
-			let i = Yr(this.shapeDrag.origin, this.shapeDrag.role, [e.lng, e.lat], {
+			let i = ii(this.shapeDrag.origin, this.shapeDrag.role, [e.lng, e.lat], {
 				center: this.shapeDrag.origin.center,
 				pointer: this.shapeDrag.originPointer
 			});
@@ -9427,7 +9881,7 @@ var Zr = class extends Ne {
 	}
 	onMouseMove(e) {
 		let t = this.host(), n = t.selected?.[0];
-		n == null || !J(this.modeOf(n)) ? super.onMouseMove(e) : this.hitHandle(e) ? t.setCursor("pointer") : t.dragFeature?.canDrag(e, n) ? t.setCursor("move") : t.setCursor("unset");
+		n == null || !this.usesShapeHandles(n) ? super.onMouseMove(e) : this.hitHandle(e) ? t.setCursor("pointer") : t.dragFeature?.canDrag(e, n) ? t.setCursor("move") : t.setCursor("unset");
 	}
 	host() {
 		return this;
@@ -9435,6 +9889,9 @@ var Zr = class extends Ne {
 	modeOf(e) {
 		let t = this.host().readFeature?.getProperties(e)?.mode;
 		return typeof t == "string" ? t : void 0;
+	}
+	usesShapeHandles(e) {
+		return Nr(this.modeOf(e)) && this.paramsOf(e) != null;
 	}
 	featureOf(e) {
 		let t = this.host();
@@ -9446,11 +9903,24 @@ var Zr = class extends Ne {
 	paramsOf(e, t = !1) {
 		let n = this.featureOf(e);
 		if (!n) return null;
-		let r = qr(n);
+		let r = ni(n);
 		if (!r || !t) return r;
 		let i = n.geometry?.coordinates?.[0];
 		if (!Array.isArray(i) || i.length < 4) return r;
-		let a = i[0][0] === i[i.length - 1][0] && i[0][1] === i[i.length - 1][1] ? i.slice(0, -1) : i, o = 0, s = 0;
+		let a = i[0][0] === i[i.length - 1][0] && i[0][1] === i[i.length - 1][1] ? i.slice(0, -1) : i;
+		if (!a.length) return r;
+		if (r.mode === "sector") return {
+			...r,
+			center: [a[0][0], a[0][1]]
+		};
+		if (r.mode === "sensor") {
+			let e = J(r.center[0], r.center[1], r.radiusMeters, r.startBearing);
+			return {
+				...r,
+				center: [r.center[0] + (a[0][0] - e[0]), r.center[1] + (a[0][1] - e[1])]
+			};
+		}
+		let o = 0, s = 0;
 		for (let e of a) o += e[0], s += e[1];
 		return {
 			...r,
@@ -9460,14 +9930,14 @@ var Zr = class extends Ne {
 	writeShape(e, t, n) {
 		let r = this.host();
 		if (!r.mutateFeature) return;
-		let i = Hr(t, 64, r.coordinatePrecision ?? 9);
+		let i = Yr(t, 64, r.coordinatePrecision ?? 9);
 		r.mutateFeature.updatePolygon({
 			featureId: e,
 			coordinateMutations: {
 				type: "replace",
 				coordinates: [i]
 			},
-			propertyMutations: Jr(t),
+			propertyMutations: ri(t),
 			context: { updateType: n }
 		}), this.syncShapeHandles(e);
 	}
@@ -9493,7 +9963,7 @@ var Zr = class extends Ne {
 	syncShapeHandles(e, t = !1) {
 		let n = this.host(), r = this.paramsOf(e, t || !!n.dragFeature?.isDragging());
 		if (!r || !n.mutateFeature) return;
-		let i = Gr(r), a = Ur(r.mode);
+		let i = Qr(r), a = Xr(r.mode);
 		if (this.shapeHandles.featureId !== e || this.shapeHandles.ids.length !== i.length) {
 			this.deleteShapeHandles();
 			let t = n.mutateFeature.createGuidancePoints({
@@ -9514,10 +9984,10 @@ var Zr = class extends Ne {
 			coordinate: i[t]
 		})));
 	}
-}, $r = (e, t) => {
+}, pi = (e, t) => {
 	let n = t.updateType;
 	return n === "finish" || n === "commit" ? Cn(e) : { valid: !0 };
-}, ei = () => ({
+}, mi = () => ({
 	render: new U({
 		modeName: "render",
 		styles: {}
@@ -9526,7 +9996,7 @@ var Zr = class extends Ne {
 	marker: new Un({
 		editable: !0,
 		styles: {
-			markerUrl: wr,
+			markerUrl: Er,
 			markerWidth: 27,
 			markerHeight: 27
 		}
@@ -9535,17 +10005,17 @@ var Zr = class extends Ne {
 	polyline: new _t(),
 	polygon: new Dt({
 		editable: !0,
-		validation: $r
+		validation: pi
 	}),
 	rectangle: new At(),
 	"angled-rectangle": new Dn(),
-	circle: new Dr(),
-	ellipse: new Zr(),
+	circle: new kr(),
+	ellipse: new oi(),
 	freehand: new We(),
 	"freehand-linestring": new Bn(),
-	sensor: new Fn(),
-	sector: new Mn(),
-	select: new Qr({
+	sensor: new di(),
+	sector: new ci(),
+	select: new fi({
 		flags: {
 			point: { feature: { draggable: !0 } },
 			marker: { feature: { draggable: !0 } },
@@ -9619,8 +10089,8 @@ var Zr = class extends Ne {
 			} },
 			sensor: { feature: {
 				draggable: !0,
-				rotateable: !0,
-				scaleable: !0,
+				rotateable: !1,
+				scaleable: !1,
 				coordinates: {
 					midpoints: !0,
 					draggable: !0,
@@ -9629,8 +10099,8 @@ var Zr = class extends Ne {
 			} },
 			sector: { feature: {
 				draggable: !0,
-				rotateable: !0,
-				scaleable: !0,
+				rotateable: !1,
+				scaleable: !1,
 				coordinates: {
 					midpoints: !0,
 					draggable: !0,
@@ -9668,7 +10138,7 @@ var Zr = class extends Ne {
 		modeName: "redo",
 		styles: {}
 	}),
-	text: new Er({
+	text: new Or({
 		editable: !0,
 		placeholder: "Enter Label here...",
 		styles: {
@@ -9680,7 +10150,7 @@ var Zr = class extends Ne {
 			textSelectedHaloColor: "#E0B03F"
 		}
 	})
-}), ti = {
+}), hi = {
 	padding: "4px 8px",
 	fontSize: "12px",
 	lineHeight: "1.4",
@@ -9698,7 +10168,7 @@ var Zr = class extends Ne {
 	flex: "1",
 	boxSizing: "border-box",
 	position: "relative"
-}, ni = {
+}, gi = {
 	padding: "6px 10px",
 	fontSize: "11px",
 	fontFamily: "sans-serif",
@@ -9713,7 +10183,7 @@ var Zr = class extends Ne {
 	minHeight: "25px",
 	boxSizing: "border-box",
 	position: "relative"
-}, ri = {
+}, _i = {
 	position: "absolute",
 	zIndex: "1000",
 	display: "flex",
@@ -9725,7 +10195,7 @@ var Zr = class extends Ne {
 	borderRadius: "0",
 	overflow: "hidden",
 	background: "rgba(255,255,255,1.0)"
-}, ii = {
+}, vi = {
 	display: "block",
 	padding: "4px 8px",
 	fontSize: "10px",
@@ -9733,7 +10203,7 @@ var Zr = class extends Ne {
 	color: "#888",
 	background: "rgba(255,255,255,0.95)",
 	borderTop: "1px solid #d9d9d9"
-}, ai = {
+}, yi = {
 	point: {
 		key: "p",
 		heldKeys: []
@@ -9818,7 +10288,7 @@ var Zr = class extends Ne {
 		key: "z",
 		heldKeys: ["ctrl", "shift"]
 	}
-}, oi = {
+}, bi = {
 	"time-isochrone": {
 		key: "n",
 		heldKeys: []
@@ -9835,7 +10305,7 @@ var Zr = class extends Ne {
 		key: "y",
 		heldKeys: ["meta", "shift"]
 	}
-}, $ = 6371008.8, si = {
+}, $ = 6371008.8, xi = {
 	centimeters: $ * 100,
 	centimetres: $ * 100,
 	cm: $ * 100,
@@ -9863,33 +10333,33 @@ var Zr = class extends Ne {
 	yards: $ * 1.0936,
 	yd: $ * 1.0936
 };
-function ci(e, t, n = {}) {
+function Si(e, t, n = {}) {
 	let r = { type: "Feature" };
 	return (n.id === 0 || n.id) && (r.id = n.id), n.bbox && (r.bbox = n.bbox), r.properties = t || {}, r.geometry = e, r;
 }
-function li(e, t, n = {}) {
+function Ci(e, t, n = {}) {
 	if (!e) throw Error("coordinates is required");
 	if (!Array.isArray(e)) throw Error("coordinates must be an Array");
 	if (e.length < 2) throw Error("coordinates must be at least 2 numbers long");
-	if (!fi(e[0]) || !fi(e[1])) throw Error("coordinates must contain numbers");
-	return ci({
+	if (!Ei(e[0]) || !Ei(e[1])) throw Error("coordinates must contain numbers");
+	return Si({
 		type: "Point",
 		coordinates: e
 	}, t, n);
 }
-function ui(e, t = "kilometers") {
-	let n = si[t];
+function wi(e, t = "kilometers") {
+	let n = xi[t];
 	if (!n) throw Error(t + " units is invalid");
 	return e * n;
 }
-function di(e) {
+function Ti(e) {
 	return e % 360 * Math.PI / 180;
 }
-function fi(e) {
+function Ei(e) {
 	return !isNaN(e) && e !== null && !Array.isArray(e);
 }
 // node_modules/.pnpm/@turf+meta@7.4.0/node_modules/@turf/meta/dist/esm/index.js
-function pi(e, t, n) {
+function Di(e, t, n) {
 	if (e !== null) for (var r, i, a, o, s, c, l, u = 0, d = 0, f, p = e.type, m = p === "FeatureCollection", h = p === "Feature", g = m ? e.features.length : 1, _ = 0; _ < g; _++) {
 		l = m ? e.features[_].geometry : h ? e.geometry : e, f = l ? l.type === "GeometryCollection" : !1, s = f ? l.geometries.length : 1;
 		for (var v = 0; v < s; v++) {
@@ -9935,7 +10405,7 @@ function pi(e, t, n) {
 						}
 						break;
 					case "GeometryCollection":
-						for (r = 0; r < o.geometries.length; r++) if (pi(o.geometries[r], t, n) === !1) return !1;
+						for (r = 0; r < o.geometries.length; r++) if (Di(o.geometries[r], t, n) === !1) return !1;
 						break;
 					default: throw Error("Unknown Geometry Type");
 				}
@@ -9943,7 +10413,7 @@ function pi(e, t, n) {
 		}
 	}
 }
-function mi(e, t) {
+function Oi(e, t) {
 	var n, r, i, a, o, s, c, l, u, d, f = 0, p = e.type === "FeatureCollection", m = e.type === "Feature", h = p ? e.features.length : 1;
 	for (n = 0; n < h; n++) {
 		for (s = p ? e.features[n].geometry : m ? e.geometry : e, l = p ? e.features[n].properties : m ? e.properties : {}, u = p ? e.features[n].bbox : m ? e.bbox : void 0, d = p ? e.features[n].id : m ? e.id : void 0, c = s ? s.type === "GeometryCollection" : !1, o = c ? s.geometries.length : 1, i = 0; i < o; i++) if (a = c ? s.geometries[i] : s, a === null) {
@@ -9965,22 +10435,22 @@ function mi(e, t) {
 		f++;
 	}
 }
-function hi(e, t, n) {
+function ki(e, t, n) {
 	var r = n;
-	return mi(e, function(e, i, a, o, s) {
+	return Oi(e, function(e, i, a, o, s) {
 		r = i === 0 && n === void 0 ? e : t(r, e, i, a, o, s);
 	}), r;
 }
 // node_modules/.pnpm/@turf+area@7.4.0/node_modules/@turf/area/dist/esm/index.js
-function gi(e) {
-	return hi(e, (e, t) => e + _i(t), 0);
+function Ai(e) {
+	return ki(e, (e, t) => e + ji(t), 0);
 }
-function _i(e) {
+function ji(e) {
 	let t = 0, n;
 	switch (e.type) {
-		case "Polygon": return vi(e.coordinates);
+		case "Polygon": return Mi(e.coordinates);
 		case "MultiPolygon":
-			for (n = 0; n < e.coordinates.length; n++) t += vi(e.coordinates[n]);
+			for (n = 0; n < e.coordinates.length; n++) t += Mi(e.coordinates[n]);
 			return t;
 		case "Point":
 		case "MultiPoint":
@@ -9989,26 +10459,26 @@ function _i(e) {
 	}
 	return 0;
 }
-function vi(e) {
+function Mi(e) {
 	let t = 0;
 	if (e && e.length > 0) {
-		t += Math.abs(xi(e[0]));
-		for (let n = 1; n < e.length; n++) t -= Math.abs(xi(e[n]));
+		t += Math.abs(Fi(e[0]));
+		for (let n = 1; n < e.length; n++) t -= Math.abs(Fi(e[n]));
 	}
 	return t;
 }
-var yi = $ * $ / 2, bi = Math.PI / 180;
-function xi(e) {
+var Ni = $ * $ / 2, Pi = Math.PI / 180;
+function Fi(e) {
 	let t = e.length - 1;
 	if (t <= 2) return 0;
 	let n = 0, r = 0;
 	for (; r < t;) {
-		let i = e[r], a = e[r + 1 === t ? 0 : r + 1], o = e[r + 2 >= t ? (r + 2) % t : r + 2], s = i[0] * bi, c = a[1] * bi, l = o[0] * bi;
+		let i = e[r], a = e[r + 1 === t ? 0 : r + 1], o = e[r + 2 >= t ? (r + 2) % t : r + 2], s = i[0] * Pi, c = a[1] * Pi, l = o[0] * Pi;
 		n += (l - s) * Math.sin(c), r++;
 	}
-	return n * yi;
+	return n * Ni;
 }
-var Si = gi, Ci = (e, t, n = void 0, r = or) => {
+var Ii = Ai, Li = (e, t, n = void 0, r = cr) => {
 	let i = [
 		"square meters",
 		"square kilometers",
@@ -10022,11 +10492,11 @@ var Si = gi, Ci = (e, t, n = void 0, r = or) => {
 	];
 	if (n && typeof n != "function") {
 		let t = i.includes(n), o = a.includes(n);
-		if (t) return Ti(e, n, r);
-		if (o) return Ei(e, n, r);
+		if (t) return zi(e, n, r);
+		if (o) return Bi(e, n, r);
 	}
-	return n && typeof n == "function" ? n(e) : wi(e, t, r);
-}, wi = (e, t, n) => t === "metric" ? e >= 1e6 ? Ti(e, "square kilometers", n) : e >= 1e4 ? Ti(e, "hectares", n) : e >= 100 ? Ti(e, "ares", n) : Ti(e, "square meters", n) : e >= 2589988.11 ? Ei(e, "square miles", n) : e >= 4046.856 ? Ei(e, "acres", n) : e >= .83612736 ? Ei(e, "square yards", n) : Ei(e, "square feet", n), Ti = (e, t, n) => {
+	return n && typeof n == "function" ? n(e) : Ri(e, t, r);
+}, Ri = (e, t, n) => t === "metric" ? e >= 1e6 ? zi(e, "square kilometers", n) : e >= 1e4 ? zi(e, "hectares", n) : e >= 100 ? zi(e, "ares", n) : zi(e, "square meters", n) : e >= 2589988.11 ? Bi(e, "square miles", n) : e >= 4046.856 ? Bi(e, "acres", n) : e >= .83612736 ? Bi(e, "square yards", n) : Bi(e, "square feet", n), zi = (e, t, n) => {
 	let r = e, i = n["square meters"];
 	switch (t) {
 		case "square meters":
@@ -10044,7 +10514,7 @@ var Si = gi, Ci = (e, t, n = void 0, r = or) => {
 		area: r,
 		unit: i
 	};
-}, Ei = (e, t, n) => {
+}, Bi = (e, t, n) => {
 	let r = e / 2589988.11, i = n["square meters"];
 	switch (t) {
 		case "square feet":
@@ -10062,13 +10532,13 @@ var Si = gi, Ci = (e, t, n = void 0, r = or) => {
 		area: r,
 		unit: i
 	};
-}, Di = (e, t, n, r, i) => {
+}, Vi = (e, t, n, r, i) => {
 	if (e.geometry.type !== "Polygon") return e;
-	let a = Ci(Si(e.geometry), t, r, i);
+	let a = Li(Ii(e.geometry), t, r, i);
 	return a.area = parseFloat(a.area.toFixed(n)), e.properties.area = a.area, e.properties.unit = a.unit, e;
 };
 // node_modules/.pnpm/@turf+invariant@7.4.0/node_modules/@turf/invariant/dist/esm/index.js
-function Oi(e) {
+function Hi(e) {
 	if (!e) throw Error("coord is required");
 	if (!Array.isArray(e)) {
 		if (e.type === "Feature" && e.geometry !== null && e.geometry.type === "Point") return [...e.geometry.coordinates];
@@ -10078,11 +10548,11 @@ function Oi(e) {
 	throw Error("coord must be GeoJSON Point or an Array of numbers");
 }
 // node_modules/.pnpm/@turf+distance@7.4.0/node_modules/@turf/distance/dist/esm/index.js
-function ki(e, t, n = {}) {
-	var r = Oi(e), i = Oi(t), a = di(i[1] - r[1]), o = di(i[0] - r[0]), s = di(r[1]), c = di(i[1]), l = Math.sin(a / 2) ** 2 + Math.sin(o / 2) ** 2 * Math.cos(s) * Math.cos(c);
-	return ui(2 * Math.atan2(Math.sqrt(l), Math.sqrt(1 - l)), n.units);
+function Ui(e, t, n = {}) {
+	var r = Hi(e), i = Hi(t), a = Ti(i[1] - r[1]), o = Ti(i[0] - r[0]), s = Ti(r[1]), c = Ti(i[1]), l = Math.sin(a / 2) ** 2 + Math.sin(o / 2) ** 2 * Math.cos(s) * Math.cos(c);
+	return wi(2 * Math.atan2(Math.sqrt(l), Math.sqrt(1 - l)), n.units);
 }
-var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
+var Wi = Ui, Gi = (e, t = "metric", n = void 0, r = cr) => {
 	let i = [
 		"centimeter",
 		"meter",
@@ -10097,21 +10567,21 @@ var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
 	};
 	if (n && typeof n != "function") {
 		let t = i.includes(n), s = a.includes(n);
-		t ? o = Ni(e, n, r) : s && (o = Pi(e, n, r));
-	} else o = n && typeof n == "function" ? n(e) : Mi(e, t, r);
+		t ? o = qi(e, n, r) : s && (o = Ji(e, n, r));
+	} else o = n && typeof n == "function" ? n(e) : Ki(e, t, r);
 	return o;
-}, Mi = (e, t, n) => {
+}, Ki = (e, t, n) => {
 	let r = {
 		distance: e,
 		unit: n.meter
 	};
-	if (t === "metric") r = e >= 1e3 ? Ni(e, "kilometer", n) : e >= 1 ? Ni(e, "meter", n) : Ni(e, "centimeter", n);
+	if (t === "metric") r = e >= 1e3 ? qi(e, "kilometer", n) : e >= 1 ? qi(e, "meter", n) : qi(e, "centimeter", n);
 	else if (t === "imperial") {
 		let t = Math.round(e * 3.28084 * 10) / 10;
-		r = t >= 5280 ? Pi(e, "mile", n) : t >= 1 ? Pi(e, "foot", n) : Pi(e, "inch", n);
+		r = t >= 5280 ? Ji(e, "mile", n) : t >= 1 ? Ji(e, "foot", n) : Ji(e, "inch", n);
 	}
 	return r;
-}, Ni = (e, t, n) => {
+}, qi = (e, t, n) => {
 	let r = {
 		distance: e,
 		unit: n.meter
@@ -10129,7 +10599,7 @@ var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
 		default: r.distance = e, r.unit = n.meter;
 	}
 	return r;
-}, Pi = (e, t, n) => {
+}, Ji = (e, t, n) => {
 	let r = Math.round(e * 3.28084 * 10) / 10, i = {
 		distance: r / 5280,
 		unit: n.mile
@@ -10144,11 +10614,11 @@ var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
 		default: i.distance = r / 5280, i.unit = n.mile;
 	}
 	return i;
-}, Fi = (e, t, n, r, i, a, o, s) => {
+}, Yi = (e, t, n, r, i, a, o, s) => {
 	if (e.geometry.type !== "LineString") return e;
 	let c = e.geometry.coordinates, l = 0, u = [];
 	for (let t = 0; t < c.length - 1; t++) {
-		let n = c[t], r = c[t + 1], i = Ai(n, r, { units: "meters" });
+		let n = c[t], r = c[t + 1], i = Wi(n, r, { units: "meters" });
 		l += i;
 		let d = JSON.parse(JSON.stringify(e));
 		if (d.id = `${d.id}-${t}`, d.geometry.coordinates = [n, r], d.properties.originalId = e.id, d.properties.distance = i, d.properties.total = l, o === !0 && s === void 0) {
@@ -10160,32 +10630,32 @@ var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
 		u.push(d);
 	}
 	e.properties.distance = u[u.length - 1].properties.total, e.properties.segments = u;
-	let d = ji(e.properties.distance, t, r, i);
+	let d = Gi(e.properties.distance, t, r, i);
 	return e.properties.distance = d.distance, e.properties.unit = d.unit, e.properties.segments.forEach((e) => {
-		let n = ji(e.properties.distance, t, r, i);
+		let n = Gi(e.properties.distance, t, r, i);
 		e.properties.distance = n.distance, e.properties.unit = n.unit;
-		let a = ji(e.properties.total, t, r, i);
+		let a = Gi(e.properties.total, t, r, i);
 		e.properties.total = a.distance, e.properties.totalUnit = a.unit;
 	}), e.properties.distance = parseFloat(e.properties.distance.toFixed(n)), e.properties.segments.forEach((e) => {
 		e.properties.distance = parseFloat(e.properties.distance.toFixed(n)), e.properties.total = parseFloat(e.properties.total.toFixed(n));
 	}), e;
-}, Ii = (e, t = "metric", n = or) => t === "imperial" ? {
+}, Xi = (e, t = "metric", n = cr) => t === "imperial" ? {
 	elevation: e * 3.28084,
 	unit: n.foot
 } : {
 	elevation: e,
 	unit: n.meter
-}, Li = /* @__PURE__ */ new Set([
+}, Zi = /* @__PURE__ */ new Set([
 	"ctrl",
 	"control",
 	"meta"
-]), Ri = (e) => {
+]), Qi = (e) => {
 	let t = e.heldKeys.map((e) => e.toLowerCase());
-	if (!t.some((e) => Li.has(e))) return [{
+	if (!t.some((e) => Zi.has(e))) return [{
 		key: e.key,
 		heldKeys: [...e.heldKeys]
 	}];
-	let n = t.filter((e) => !Li.has(e));
+	let n = t.filter((e) => !Zi.has(e));
 	return [{
 		key: e.key,
 		heldKeys: ["control", ...n]
@@ -10193,35 +10663,35 @@ var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
 		key: e.key,
 		heldKeys: ["meta", ...n]
 	}];
-}, zi = (e) => e.charAt(0).toUpperCase() + e.slice(1), Bi = () => {
+}, $i = (e) => e.charAt(0).toUpperCase() + e.slice(1), ea = () => {
 	if (typeof navigator > "u") return !1;
 	let e = navigator.userAgentData?.platform ?? navigator.platform ?? navigator.userAgent ?? "";
 	return /Mac|iPhone|iPad|iPod/i.test(e);
-}, Vi = (e) => {
+}, ta = (e) => {
 	switch (e.toLowerCase()) {
 		case "meta":
 		case "ctrl":
-		case "control": return Bi() ? "Command" : "Ctrl";
-		case "alt": return Bi() ? "Option" : "Alt";
+		case "control": return ea() ? "Command" : "Ctrl";
+		case "alt": return ea() ? "Option" : "Alt";
 		case "shift": return "Shift";
-		default: return e.length === 1 ? e.toUpperCase() : zi(e);
+		default: return e.length === 1 ? e.toUpperCase() : $i(e);
 	}
-}, Hi = [
+}, na = [
 	"{prefix}-point",
 	"{prefix}-point-lower",
 	"{prefix}-linestring",
 	"{prefix}-polygon",
 	"{prefix}-polygon-outline"
-], Ui = [
-	...Hi,
-	ur.polygonLayerSpec?.source,
-	ur.lineLayerLabelSpec?.source
-], Wi = [
-	...Hi,
-	Cr.routingLineLayerNodeLabelSpec?.source,
-	Cr.timeIsochroneLabelLayerSpec?.source,
-	Cr.distanceIsochroneLabelLayerSpec?.source
-], Gi = (e, t, n = Hi, r = "td") => {
+], ra = [
+	...na,
+	fr.polygonLayerSpec?.source,
+	fr.lineLayerLabelSpec?.source
+], ia = [
+	...na,
+	Tr.routingLineLayerNodeLabelSpec?.source,
+	Tr.timeIsochroneLabelLayerSpec?.source,
+	Tr.distanceIsochroneLabelLayerSpec?.source
+], aa = (e, t, n = na, r = "td") => {
 	n = n.map((e) => e.replace("{prefix}", r));
 	let i = JSON.parse(JSON.stringify(e));
 	return t && (t.onlyTerraDrawLayers === !0 ? (i.layers = i.layers.filter((e) => "source" in e && n.includes(e.source)), Object.keys(i.sources).forEach((e) => {
@@ -10229,12 +10699,12 @@ var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
 	})) : t.excludeTerraDrawLayers === !0 && (i.layers = i.layers.filter((e) => "source" in e && !n.includes(e.source) || e.type === "background"), Object.keys(i.sources).forEach((e) => {
 		n.includes(e) && delete i.sources[e];
 	}))), i;
-}, Ki = (e, t = 250) => {
+}, oa = (e, t = 250) => {
 	let n;
 	return (...r) => {
 		clearTimeout(n), n = setTimeout(() => e(...r), t);
 	};
-}, qi = class {
+}, sa = class {
 	cache = /* @__PURE__ */ new Map();
 	maxSize;
 	ttl;
@@ -10284,7 +10754,7 @@ var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
 			ttl: this.ttl
 		};
 	}
-}, Ji = class {
+}, ca = class {
 	className;
 	dialog;
 	title;
@@ -10325,60 +10795,60 @@ var Ai = ki, ji = (e, t = "metric", n = void 0, r = or) => {
 			}), r.appendChild(i);
 		}), r;
 	}
-}, Yi = (e, t, n, r, i = "metric", a = or) => {
+}, la = (e, t, n, r, i = "metric", a = cr) => {
 	if (e.geometry.type !== "Point") return e;
 	let o = e.geometry.coordinates;
 	if (n === !0) {
 		if (r === void 0) {
 			let n = t?.queryTerrainElevation(o);
 			if (n) {
-				let { elevation: t, unit: r } = Ii(n, i, a);
+				let { elevation: t, unit: r } = Xi(n, i, a);
 				e.properties.elevation = t, e.properties.elevationUnit = r;
 			}
 		} else if (e.properties.elevation !== void 0 && typeof e.properties.elevation == "number") {
 			let t = e.properties.elevation, n = e.properties.elevationUnit;
 			(n === "ft" || n === "foot") && (t /= 3.28084);
-			let { elevation: r, unit: o } = Ii(t, i, a);
+			let { elevation: r, unit: o } = Xi(t, i, a);
 			e.properties.elevation = r, e.properties.elevationUnit = o;
 		}
 	}
 	return e;
-}, Xi = Object.defineProperty, Zi = (e, t, n) => t in e ? Xi(e, t, {
+}, ua = Object.defineProperty, da = (e, t, n) => t in e ? ua(e, t, {
 	enumerable: !0,
 	configurable: !0,
 	writable: !0,
 	value: n
-}) : e[t] = n, Qi = (e, t, n) => Zi(e, typeof t == "symbol" ? t : t + "", n), $i = 2 * Math.PI * 6378137 / 2;
-function ea(e) {
+}) : e[t] = n, fa = (e, t, n) => da(e, typeof t == "symbol" ? t : t + "", n), pa = 2 * Math.PI * 6378137 / 2;
+function ma(e) {
 	return e ||= 256, 2 * Math.PI * 6378137 / e;
 }
-function ta(e, t, n = {
+function ha(e, t, n = {
 	enable: !0,
 	decimal: 1
 }) {
-	e = ua(e);
-	var r = e[0], i = e[1], a = r * $i / 180, o = Math.log(Math.tan((90 + i) * Math.PI / 360)) / (Math.PI / 180);
-	return o = o * $i / 180, n.enable && (a = Number(a.toFixed(n.decimal)), o = Number(o.toFixed(n.decimal))), [a, o];
+	e = wa(e);
+	var r = e[0], i = e[1], a = r * pa / 180, o = Math.log(Math.tan((90 + i) * Math.PI / 360)) / (Math.PI / 180);
+	return o = o * pa / 180, n.enable && (a = Number(a.toFixed(n.decimal)), o = Number(o.toFixed(n.decimal))), [a, o];
 }
-function na(e, t, n) {
-	var r = e[0], i = e[1], a = da(t, n);
+function ga(e, t, n) {
+	var r = e[0], i = e[1], a = Ta(t, n);
 	return [
-		(r + $i) / a,
-		(i + $i) / a,
+		(r + pa) / a,
+		(i + pa) / a,
 		t
 	];
 }
-function ra(e, t, n) {
-	return e = ua(e), aa(na(ta(e), t));
+function _a(e, t, n) {
+	return e = wa(e), ya(ga(ha(e), t));
 }
-function ia(e, t, n) {
-	return e = ua(e), t === 0 ? [
+function va(e, t, n) {
+	return e = wa(e), t === 0 ? [
 		0,
 		0,
 		0
-	] : oa(ra(e, t));
+	] : ba(_a(e, t));
 }
-function aa(e, t, n) {
+function ya(e, t, n) {
 	t ||= 256;
 	var r = e[0], i = e[1], a = e[2];
 	if (a === 0) return [
@@ -10386,7 +10856,7 @@ function aa(e, t, n) {
 		0,
 		0
 	];
-	la(a);
+	Ca(a);
 	var o = Math.ceil(r / t) - 1, s = Math.ceil(i / t) - 1;
 	return o < 0 && (o = 0), s < 0 && (s = 0), [
 		o,
@@ -10394,8 +10864,8 @@ function aa(e, t, n) {
 		a
 	];
 }
-function oa(e, t) {
-	sa(e);
+function ba(e, t) {
+	xa(e);
 	var n = e[0], r = e[1], i = e[2];
 	return i === 0 ? [
 		0,
@@ -10407,14 +10877,14 @@ function oa(e, t) {
 		i
 	];
 }
-function sa(e, t) {
+function xa(e, t) {
 	var n = e[0], r = e[1], i = e[2];
 	if (i == null) throw Error("<zoom> is required");
 	if (n == null) throw Error("<x> is required");
 	if (r == null) throw Error("<y> is required");
-	return i = la(i), e = ca(e), e;
+	return i = Ca(i), e = Sa(e), e;
 }
-function ca(e) {
+function Sa(e) {
 	var t = e[0], n = e[1], r = e[2], i = 2 ** r;
 	return t %= i, t < 0 && (t += i), [
 		t,
@@ -10422,37 +10892,37 @@ function ca(e) {
 		r
 	];
 }
-function la(e) {
+function Ca(e) {
 	if (e === !1) return e;
 	if (e == null) throw Error("<zoom> is required");
 	if (e < 0) throw Error("<zoom> cannot be less than 0");
 	if (e > 32) throw Error("<zoom> cannot be greater than 32");
 	return e;
 }
-function ua(e, t) {
-	var n = pa(e[0]), r = fa(e[1]);
+function wa(e, t) {
+	var n = Da(e[0]), r = Ea(e[1]);
 	return r > 85 && (r = 85), r < -85 && (r = -85), [n, r];
 }
-function da(e, t) {
-	return ea(t) / 2 ** e;
+function Ta(e, t) {
+	return ma(t) / 2 ** e;
 }
-function fa(e) {
+function Ea(e) {
 	if (e == null) throw Error("lat is required");
 	return (e > 90 || e < -90) && (e %= 180, e > 90 && (e = -180 + e), e < -90 && (e = 180 + e), e === 0 && (e = 0)), e;
 }
-function pa(e) {
+function Da(e) {
 	if (e == null) throw Error("lng is required");
 	return (e > 180 || e < -180) && (e %= 360, e > 180 && (e = -360 + e), e < -180 && (e = 360 + e), e === 0 && (e = 0)), e;
 }
-var ma = class {
+var Oa = class {
 	constructor(e, t, n, r, i) {
-		Qi(this, "url"), Qi(this, "tileSize"), Qi(this, "tms"), Qi(this, "minzoom"), Qi(this, "maxzoom"), this.url = e, this.tileSize = t, this.tms = i, this.minzoom = n, this.maxzoom = r, this.tms = i;
+		fa(this, "url"), fa(this, "tileSize"), fa(this, "tms"), fa(this, "minzoom"), fa(this, "maxzoom"), this.url = e, this.tileSize = t, this.tms = i, this.minzoom = n, this.maxzoom = r, this.tms = i;
 	}
 	getValue(e, t) {
 		return new Promise((n, r) => {
 			let i = e[0], a = e[1], o = t;
 			t > this.maxzoom ? o = this.maxzoom : t < this.minzoom && (o = this.minzoom);
-			let s = this.tms ? ra([i, a], o) : ia([i, a], o), c = this.url.replace(/{x}/g, s[0].toString()).replace(/{y}/g, s[1].toString()).replace(/{z}/g, s[2].toString()), l = this.getUrlExtension(c);
+			let s = this.tms ? _a([i, a], o) : va([i, a], o), c = this.url.replace(/{x}/g, s[0].toString()).replace(/{y}/g, s[1].toString()).replace(/{z}/g, s[2].toString()), l = this.getUrlExtension(c);
 			switch (l ||= "png", l) {
 				case "png":
 				case "webp":
@@ -10522,7 +10992,7 @@ var ma = class {
 		let n = 180 / Math.PI, r = Math.PI - 2 * Math.PI * e / 2 ** t;
 		return n * Math.atan(.5 * (Math.exp(r) - Math.exp(-r)));
 	}
-}, ha = class extends ma {
+}, ka = class extends Oa {
 	constructor(e, t, n = 5, r = 15, i = !1) {
 		super(e, t, n, r, i);
 	}
@@ -10532,7 +11002,7 @@ var ma = class {
 	calc(e, t, n) {
 		return -1e4 + (e * 256 * 256 + t * 256 + n) * .1;
 	}
-}, ga = class extends ma {
+}, Aa = class extends Oa {
 	constructor(e, t, n = 5, r = 15, i = !1) {
 		super(e, t, n, r, i);
 	}
@@ -10543,10 +11013,10 @@ var ma = class {
 		let r = e * 256 + t + n / 256 - 32768;
 		return parseInt(r.toFixed(0));
 	}
-}, _a = (e, t = 8) => {
+}, ja = (e, t = 8) => {
 	let [n, r] = e, i = 10 ** t;
 	return `${Math.round(n * i) / i},${Math.round(r * i) / i}`;
-}, va = async (e, t, n, r, i = "metric", a = or) => {
+}, Ma = async (e, t, n, r, i = "metric", a = cr) => {
 	let o = [], s = {
 		enabled: !0,
 		maxSize: 1e3,
@@ -10554,22 +11024,22 @@ var ma = class {
 		precision: 6,
 		...n
 	}, c;
-	s.enabled && (c = r || new qi(s.maxSize, s.ttl));
+	s.enabled && (c = r || new sa(s.maxSize, s.ttl));
 	let l, u = 15;
 	if (t) {
 		let e = t.url, n = t.encoding ?? "mapbox", r = t.tileSize ?? 512, i = t.minzoom ?? 5;
 		u = t.maxzoom ?? 15;
 		let a = t.tms ?? !1;
-		l = n === "mapbox" ? new ha(e, r, i, u, a) : new ga(e, r, i, u, a);
+		l = n === "mapbox" ? new ka(e, r, i, u, a) : new Aa(e, r, i, u, a);
 	}
 	for (let t of e) o.push(new Promise((e) => {
 		t.geometry.type !== "Point" && e(t);
-		let n = t.geometry.coordinates, r = _a(n, s.precision);
+		let n = t.geometry.coordinates, r = ja(n, s.precision);
 		if (c) {
 			let n = c.get(r);
 			if (n !== void 0) {
 				if (!isNaN(n)) {
-					let { elevation: e, unit: r } = Ii(n, i, a);
+					let { elevation: e, unit: r } = Xi(n, i, a);
 					t.properties.elevation = e, t.properties.elevationUnit = r;
 				}
 				e(t);
@@ -10579,7 +11049,7 @@ var ma = class {
 		l ? l.getElevation(t.geometry.coordinates, u).then((n) => {
 			if (n != null && typeof n == "number") {
 				c && c.set(r, n);
-				let { elevation: e, unit: o } = Ii(n, i, a);
+				let { elevation: e, unit: o } = Xi(n, i, a);
 				t.properties.elevation = e, t.properties.elevationUnit = o;
 			}
 			e(t);
@@ -10588,7 +11058,7 @@ var ma = class {
 		}) : e(t);
 	}));
 	return await Promise.all(o);
-}, ya = (e, t = 9) => {
+}, Na = (e, t = 9) => {
 	function n(e) {
 		return [Number(e[0].toFixed(t)), Number(e[1].toFixed(t))];
 	}
@@ -10617,12 +11087,12 @@ var ma = class {
 		...e,
 		geometry: r(e.geometry)
 	}));
-}, ba = /* @__PURE__ */ new Set([
+}, Pa = /* @__PURE__ */ new Set([
 	"delete",
 	"delete-selection",
 	"download",
 	"settings"
-]), xa = /* @__PURE__ */ new Set(["undo", "redo"]), Sa = new Set(Object.keys(oi)), Ca = class {
+]), Fa = /* @__PURE__ */ new Set(["undo", "redo"]), Ia = new Set(Object.keys(bi)), La = class {
 	terradraw;
 	controlContainer;
 	modeActions;
@@ -10631,8 +11101,8 @@ var ma = class {
 	constructor(e, t, n, r) {
 		this.terradraw = e, this.controlContainer = t, this.modeActions = r;
 		let i = {
-			...ai,
-			...oi
+			...yi,
+			...bi
 		};
 		this.shortcuts = n ? {
 			...i,
@@ -10643,15 +11113,15 @@ var ma = class {
 		this.validateShortcuts(), this.handler = (e) => {
 			let t = e.target;
 			if (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable || this.initialiseModeActionKeyboardShortcuts(e) || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
-			let n = Object.entries(this.shortcuts).filter(([e]) => !ba.has(e) && !xa.has(e)).find(([, t]) => t && this.matchesShortcut(e, t));
+			let n = Object.entries(this.shortcuts).filter(([e]) => !Pa.has(e) && !Fa.has(e)).find(([, t]) => t && this.matchesShortcut(e, t));
 			if (!n) return;
 			e.preventDefault();
 			let [r] = n;
-			Sa.has(r) ? this.modeActions?.onValhallaMode?.(r) : (this.terradraw.enabled && this.terradraw.setMode(r), this.syncButtonStates(r));
+			Ia.has(r) ? this.modeActions?.onValhallaMode?.(r) : (this.terradraw.enabled && this.terradraw.setMode(r), this.syncButtonStates(r));
 		}, window.addEventListener("keydown", this.handler);
 	}
 	initialiseModeActionKeyboardShortcuts(e) {
-		let t = Object.entries(this.shortcuts).filter(([e]) => ba.has(e));
+		let t = Object.entries(this.shortcuts).filter(([e]) => Pa.has(e));
 		for (let [n, r] of t) if (r && this.matchesShortcut(e, r)) {
 			if (!e.defaultPrevented) {
 				e.preventDefault();
@@ -10718,7 +11188,7 @@ var ma = class {
 			e.classList.add("hidden-delete-selection");
 		}), n.classList.add("active");
 	}
-}, wa = class {
+}, Ra = class {
 	controlContainer;
 	map;
 	modeButtons = {};
@@ -10765,22 +11235,22 @@ var ma = class {
 	defaultMode = "render";
 	constructor(e) {
 		this.modeButtons = {}, this.options = {
-			...ar,
-			modes: [...ar.modes ?? []],
+			...sr,
+			modes: [...sr.modes ?? []],
 			...e
 		};
 		let t = this.options.adapterOptions?.prefixId ?? "td";
 		this.options.adapterOptions || (this.options.adapterOptions = {}), this.options.adapterOptions?.prefixId || (this.options.adapterOptions.prefixId = t);
 		let n = {
-			...ai,
+			...yi,
 			...this.options.keyboardShortcuts
 		}, r = new qn({
-			...n.undo ? { undo: Ri(n.undo) } : {},
-			...n.redo ? { redo: Ri(n.redo) } : {}
+			...n.undo ? { undo: Qi(n.undo) } : {},
+			...n.redo ? { redo: Qi(n.redo) } : {}
 		});
 		this.options.undoRedo ? this.options.undoRedo.keyboardShortcuts && console.warn("MaplibreTerradrawControl: `undoRedo.keyboardShortcuts` is managed by the control and derived from `keyboardShortcuts.undo`/`keyboardShortcuts.redo` so the tooltip stays in sync. The provided instance is ignored — configure undo/redo keys via `keyboardShortcuts` instead.") : this.options.undoRedo = {
-			modeLevel: new Zn({ maxStackSize: 100 }),
-			sessionLevel: new Qn({ maxStackSize: 100 })
+			modeLevel: new $n({ maxStackSize: 100 }),
+			sessionLevel: new er({ maxStackSize: 100 })
 		}, this.options.undoRedo.keyboardShortcuts = r;
 	}
 	getDefaultPosition() {
@@ -10789,7 +11259,7 @@ var ma = class {
 	onAdd(e) {
 		if (this.options && this.options.modes && this.options.modes.length === 0) throw Error("At least a mode must be enabled.");
 		this.map = e;
-		let t = ei(), n = [];
+		let t = mi(), n = [];
 		return this.options?.modes?.forEach((e) => {
 			if (this.options.modeOptions && this.options.modeOptions[e]) {
 				let r = this.options.modeOptions[e];
@@ -10809,8 +11279,8 @@ var ma = class {
 		}), this.options?.modes?.includes("render") || (n.push(new U({
 			modeName: "default",
 			styles: {}
-		})), this.defaultMode = "default"), this.isExpanded = this.options.open === !0, this.terradraw = new er({
-			adapter: new nr({
+		})), this.defaultMode = "default"), this.isExpanded = this.options.open === !0, this.terradraw = new nr({
+			adapter: new ir({
 				map: e,
 				...this.options.adapterOptions
 			}),
@@ -10822,7 +11292,7 @@ var ma = class {
 			e.mode !== "default" && this.addTerradrawButton(e.mode);
 		}), Object.values(this.modeButtons).forEach((e) => {
 			this.controlContainer?.appendChild(e);
-		}), this.modeKeyboardShortcutController = new Ca(this.terradraw, this.controlContainer, this.options?.keyboardShortcuts, {
+		}), this.modeKeyboardShortcutController = new La(this.terradraw, this.controlContainer, this.options?.keyboardShortcuts, {
 			onDelete: () => this.handleDeleteAllFeatures(),
 			onDeleteSelected: () => this.handleDeleteSelectedFeatures(),
 			onDownload: () => this.handleDownload()
@@ -10903,14 +11373,14 @@ var ma = class {
 	}
 	addTerradrawButton(e) {
 		let t = document.createElement("button");
-		if (t.type = "button", this.modeButtons[e] = t, e === "render") t.classList.add(`maplibregl-terradraw-${this.cssPrefix}${e}-button`), this.isExpanded && t.classList.add("enabled"), t.type = "button", t.title = zi("expand or collapse drawing tool"), t.addEventListener("click", this.toggleEditor.bind(this));
+		if (t.type = "button", this.modeButtons[e] = t, e === "render") t.classList.add(`maplibregl-terradraw-${this.cssPrefix}${e}-button`), this.isExpanded && t.classList.add("enabled"), t.type = "button", t.title = $i("expand or collapse drawing tool"), t.addEventListener("click", this.toggleEditor.bind(this));
 		else {
 			t.classList.add(`maplibregl-terradraw-${this.cssPrefix}add-control`), this.isExpanded || t.classList.add("hidden");
 			let n = (this.options.keyboardShortcuts ? {
-				...ai,
+				...yi,
 				...this.options.keyboardShortcuts
-			} : ai)?.[e], r = n ? [...n.heldKeys.map((e) => Vi(e)), Vi(n.key)].join(" + ") : void 0;
-			if (t.title = r ? `${zi(e.replace(/-/g, " "))} ( ${r} )` : zi(e.replace(/-/g, " ")), e === "delete") t.classList.add(`maplibregl-terradraw-${this.cssPrefix}${e}-button`), t.addEventListener("click", this.handleDeleteAllFeatures.bind(this));
+			} : yi)?.[e], r = n ? [...n.heldKeys.map((e) => ta(e)), ta(n.key)].join(" + ") : void 0;
+			if (t.title = r ? `${$i(e.replace(/-/g, " "))} ( ${r} )` : $i(e.replace(/-/g, " ")), e === "delete") t.classList.add(`maplibregl-terradraw-${this.cssPrefix}${e}-button`), t.addEventListener("click", this.handleDeleteAllFeatures.bind(this));
 			else if (e === "delete-selection") t.classList.add(`maplibregl-terradraw-${this.cssPrefix}${e}-button`), t.classList.add("hidden-delete-selection"), t.addEventListener("click", this.handleDeleteSelectedFeatures.bind(this));
 			else if (e === "download") t.classList.add(`maplibregl-terradraw-${this.cssPrefix}${e}-button`), t.addEventListener("click", this.handleDownload.bind(this));
 			else if (["undo", "redo"].includes(e)) t.classList.add(`maplibregl-terradraw-${this.cssPrefix}${e}-button`), t.disabled = !0, t.addEventListener("click", () => {
@@ -10947,10 +11417,10 @@ var ma = class {
 		return e === !0 && (t.features = t.features.filter((e) => e.properties.selected === !0)), t;
 	}
 	cleanStyle(e, t) {
-		return Gi(e, t, Hi, this.options.adapterOptions?.prefixId);
+		return aa(e, t, na, this.options.adapterOptions?.prefixId);
 	}
 	showDeleteConfirmationDialog(e, t = "Delete All Features", n = "Are you sure you want to delete all features?") {
-		let r = new Ji("maplibre-terradraw-delete-confirmation-dialog", t);
+		let r = new ca("maplibre-terradraw-delete-confirmation-dialog", t);
 		r.create(document.body, (t) => {
 			let i = document.createElement("p");
 			i.textContent = n, t.appendChild(i);
@@ -11077,7 +11547,7 @@ var ma = class {
 		});
 	}
 	getTextModeStyling() {
-		let e = ei().text, t = this.options.modeOptions?.text, n = e?.options?.styles ?? {}, r = t?.options?.styles ?? {};
+		let e = mi().text, t = this.options.modeOptions?.text, n = e?.options?.styles ?? {}, r = t?.options?.styles ?? {};
 		return {
 			...n,
 			...r
@@ -11125,14 +11595,14 @@ var ma = class {
 	}
 };
 // node_modules/.pnpm/@turf+centroid@7.4.0/node_modules/@turf/centroid/dist/esm/index.js
-function Ta(e, t = {}) {
+function za(e, t = {}) {
 	let n = 0, r = 0, i = 0;
-	return pi(e, function(e) {
+	return Di(e, function(e) {
 		n += e[0], r += e[1], i++;
-	}, !0), li([n / i, r / i], t.properties);
+	}, !0), Ci([n / i, r / i], t.properties);
 }
 // src/lib/controls/MaplibreMeasureControl.ts
-var Ea = class extends wa {
+var Ba = class extends Ra {
 	measureOptions;
 	elevationCache;
 	get measureUnitType() {
@@ -11171,7 +11641,7 @@ var Ea = class extends wa {
 		this.measureOptions.areaUnit = e, t || this.recalc();
 	}
 	get measureUnitSymbols() {
-		return this.measureOptions.measureUnitSymbols ?? JSON.parse(JSON.stringify(or));
+		return this.measureOptions.measureUnitSymbols ?? JSON.parse(JSON.stringify(cr));
 	}
 	set measureUnitSymbols(e) {
 		let t = JSON.stringify(this.measureOptions.measureUnitSymbols) === JSON.stringify(e);
@@ -11200,7 +11670,7 @@ var Ea = class extends wa {
 		]);
 	}
 	constructor(e) {
-		let { modeOptions: t, ...n } = ur, r = {
+		let { modeOptions: t, ...n } = fr, r = {
 			...JSON.parse(JSON.stringify(n)),
 			modeOptions: { ...t }
 		};
@@ -11213,7 +11683,7 @@ var Ea = class extends wa {
 			adapterOptions: r.adapterOptions,
 			undoRedo: r.undoRedo,
 			keyboardShortcuts: r.keyboardShortcuts
-		}), this._cssPrefix = "measure-", this.measureOptions = r, this.measureOptions.elevationCacheConfig && this.measureOptions.elevationCacheConfig?.enabled && (this.elevationCache = new qi(this.measureOptions.elevationCacheConfig.maxSize, this.measureOptions.elevationCacheConfig.ttl));
+		}), this._cssPrefix = "measure-", this.measureOptions = r, this.measureOptions.elevationCacheConfig && this.measureOptions.elevationCacheConfig?.enabled && (this.elevationCache = new sa(this.measureOptions.elevationCacheConfig.maxSize, this.measureOptions.elevationCacheConfig.ttl));
 	}
 	onAdd(e) {
 		return this.controlContainer = super.onAdd(e), this.controlContainer;
@@ -11247,10 +11717,10 @@ var Ea = class extends wa {
 		}
 	}
 	cleanStyle(e, t) {
-		let n = Hi, r = this.measureOptions.polygonLayerSpec?.source;
+		let n = na, r = this.measureOptions.polygonLayerSpec?.source;
 		r && n.push(r);
 		let i = this.measureOptions.lineLayerLabelSpec?.source;
-		return i && n.push(i), Gi(e, t, n, this.measureOptions.adapterOptions?.prefixId);
+		return i && n.push(i), aa(e, t, n, this.measureOptions.adapterOptions?.prefixId);
 	}
 	registerMesureControl() {
 		if (!this.map) return;
@@ -11301,7 +11771,7 @@ var Ea = class extends wa {
 			if (r.length > 0) for (let e of r) this.measurePoint(e.id);
 		}
 	};
-	handleTerradrawFeatureReady = Ki((e) => {
+	handleTerradrawFeatureReady = oa((e) => {
 		if (!this.map || !this.terradraw) return;
 		let t = this.terradraw.getSnapshotFeature(e);
 		if (!t) return;
@@ -11376,7 +11846,7 @@ var Ea = class extends wa {
 			if (t && typeof t.data != "string" && t.data.type === "FeatureCollection") {
 				let n = t.data.features.filter((t) => t.properties?.originalId === e && t.geometry.type === "Point");
 				if (n && n.length > 0) {
-					let e = await va(n, this.measureOptions.terrainSource, this.measureOptions.elevationCacheConfig, this.elevationCache, this.measureUnitType, this.measureUnitSymbols);
+					let e = await Ma(n, this.measureOptions.terrainSource, this.measureOptions.elevationCacheConfig, this.elevationCache, this.measureUnitType, this.measureUnitSymbols);
 					this.replaceGeoJSONSource(e, this.measureOptions.lineLayerLabelSpec.source, "linestring");
 				}
 			}
@@ -11397,7 +11867,7 @@ var Ea = class extends wa {
 			for (let e of t.data.features) if (e.properties?.elevation !== void 0) {
 				let t = e.properties.elevationUnit, r = e.properties.elevation;
 				(t === "ft" || t === "foot") && (r /= 3.28084);
-				let { elevation: i, unit: a } = Ii(r, this.measureUnitType, this.measureUnitSymbols);
+				let { elevation: i, unit: a } = Xi(r, this.measureUnitType, this.measureUnitSymbols);
 				e.properties.elevation = i, e.properties.elevationUnit = a, n = !0;
 			}
 			n && this.map.getSource(e).setData(t.data);
@@ -11413,7 +11883,7 @@ var Ea = class extends wa {
 			if (n) {
 				typeof n.data != "string" && n.data.type === "FeatureCollection" && (n.data.features = n.data.features.filter((t) => t.properties?.originalId !== e));
 				let i = JSON.parse(JSON.stringify(r));
-				i.id += "-area-label", i.geometry = Ta(r.geometry).geometry, i.properties.originalId = r.id, r = Di(r, this.measureUnitType, this.areaPrecision, this.areaUnit, this.measureUnitSymbols), i.properties.area = r.properties.area, i.properties.unit = r.properties.unit, t || this.terradraw?.updateFeatureProperties(e, {
+				i.id += "-area-label", i.geometry = za(r.geometry).geometry, i.properties.originalId = r.id, r = Vi(r, this.measureUnitType, this.areaPrecision, this.areaUnit, this.measureUnitSymbols), i.properties.area = r.properties.area, i.properties.unit = r.properties.unit, t || this.terradraw?.updateFeatureProperties(e, {
 					area: i.properties.area,
 					unit: i.properties.unit
 				}), typeof n.data != "string" && n.data.type === "FeatureCollection" && n.data.features.push(i), this.map.getSource(this.measureOptions.polygonLayerSpec.source)?.setData(n.data), this.map.moveLayer(this.measureOptions.polygonLayerSpec.id, this.options.adapterOptions?.renderBelowLayerId), this.map.getLayer(this.measureOptions.lineLayerLabelSpec.id) && this.map.moveLayer(this.measureOptions.lineLayerLabelSpec.id), this.map.getLayer(this.measureOptions.routingLineLayerNodeSpec.id) && this.map.moveLayer(this.measureOptions.routingLineLayerNodeSpec.id, this.options.adapterOptions?.renderBelowLayerId), this.map.getLayer(this.measureOptions.pointLayerLabelSpec.id) && this.map.moveLayer(this.measureOptions.pointLayerLabelSpec.id, this.options.adapterOptions?.renderBelowLayerId);
@@ -11428,7 +11898,7 @@ var Ea = class extends wa {
 		if (r) {
 			let n = this.map.getStyle().sources[this.measureOptions.lineLayerLabelSpec.source];
 			if (n) {
-				typeof n.data != "string" && n.data.type === "FeatureCollection" && (n.data.features = n.data.features.filter((t) => t.properties?.originalId !== e)), r = Fi(r, this.measureUnitType, this.distancePrecision, this.distanceUnit, this.measureUnitSymbols, this.map, this.computeElevation, this.measureOptions.terrainSource);
+				typeof n.data != "string" && n.data.type === "FeatureCollection" && (n.data.features = n.data.features.filter((t) => t.properties?.originalId !== e)), r = Yi(r, this.measureUnitType, this.distancePrecision, this.distanceUnit, this.measureUnitSymbols, this.map, this.computeElevation, this.measureOptions.terrainSource);
 				let i = r.properties.segments;
 				for (let e = 0; e < i.length; e++) {
 					let t = i[e], r = t.geometry.coordinates, a = r[0], o = r[1];
@@ -11468,7 +11938,7 @@ var Ea = class extends wa {
 				elevation: void 0,
 				elevationUnit: void 0
 			};
-			this.computeElevation && (r = this.measureOptions.terrainSource === void 0 ? Yi(r, this.map, this.computeElevation, this.measureOptions.terrainSource, this.measureUnitType, this.measureUnitSymbols) : (await va([r], this.measureOptions.terrainSource, this.measureOptions.elevationCacheConfig, this.elevationCache, this.measureUnitType, this.measureUnitSymbols))[0], n = {
+			this.computeElevation && (r = this.measureOptions.terrainSource === void 0 ? la(r, this.map, this.computeElevation, this.measureOptions.terrainSource, this.measureUnitType, this.measureUnitSymbols) : (await Ma([r], this.measureOptions.terrainSource, this.measureOptions.elevationCacheConfig, this.elevationCache, this.measureUnitType, this.measureUnitSymbols))[0], n = {
 				elevation: r.properties.elevation,
 				elevationUnit: r.properties.elevationUnit
 			}), t || this.terradraw?.updateFeatureProperties(e, n);
@@ -11486,20 +11956,20 @@ var Ea = class extends wa {
 			t && t.length > 0 ? this.clearExtendedFeatures(n, t) : this.clearExtendedFeatures(n, void 0);
 		}
 	}
-}, Da = class extends wa {
+}, Va = class extends Ra {
 	controlOptions;
 	_modalDialog;
 	get routingMode() {
 		let e = this.controlOptions.modeOptions?.routing;
-		return e instanceof mr ? e : void 0;
+		return e instanceof gr ? e : void 0;
 	}
 	get timeIsochroneMode() {
 		let e = this.controlOptions.modeOptions?.["time-isochrone"];
-		return e instanceof br ? e : void 0;
+		return e instanceof Sr ? e : void 0;
 	}
 	get distanceIsochroneMode() {
 		let e = this.controlOptions.modeOptions?.["distance-isochrone"];
-		return e instanceof xr ? e : void 0;
+		return e instanceof Cr ? e : void 0;
 	}
 	get valhallaUrl() {
 		return this.routingMode?.url ?? this.timeIsochroneMode?.url ?? this.distanceIsochroneMode?.url ?? "";
@@ -11552,9 +12022,9 @@ var Ea = class extends wa {
 	}
 	constructor(e) {
 		let t = {
-			...JSON.parse(JSON.stringify(Cr)),
-			modeOptions: { ...Cr.modeOptions },
-			keyboardShortcuts: { ...oi }
+			...JSON.parse(JSON.stringify(Tr)),
+			modeOptions: { ...Tr.modeOptions },
+			keyboardShortcuts: { ...bi }
 		};
 		e && (t = {
 			...t,
@@ -11569,7 +12039,7 @@ var Ea = class extends wa {
 			"time-isochrone",
 			"distance-isochrone"
 		]) {
-			let n = Cr.modeOptions?.[e], r = t.modeOptions?.[e];
+			let n = Tr.modeOptions?.[e], r = t.modeOptions?.[e];
 			n && r && n !== r && (r.styles = {
 				...n.styles,
 				...r.styles
@@ -11594,7 +12064,7 @@ var Ea = class extends wa {
 		].filter((e) => !!e).some((e) => !e.url)) throw Error("Valhalla URL is required for this control. Please set modeOptions.routing/time-isochrone/distance-isochrone url in options.");
 	}
 	onAdd(e) {
-		return this.controlContainer = super.onAdd(e), this.createSettingsDialog(), this.modeKeyboardShortcutController && this.modeKeyboardShortcutController.destroy(), this.modeKeyboardShortcutController = new Ca(this.terradraw, this.controlContainer, this.options?.keyboardShortcuts, {
+		return this.controlContainer = super.onAdd(e), this.createSettingsDialog(), this.modeKeyboardShortcutController && this.modeKeyboardShortcutController.destroy(), this.modeKeyboardShortcutController = new La(this.terradraw, this.controlContainer, this.options?.keyboardShortcuts, {
 			onValhallaMode: (e) => this.setValhallaMode(e),
 			onValhallaSettingsSelected: () => this.handleSettingDialog(),
 			onDelete: () => this.handleDeleteAllFeatures(),
@@ -11608,15 +12078,15 @@ var Ea = class extends wa {
 		super.activate(), this.registerValhallaControl();
 	}
 	cleanStyle(e, t) {
-		let n = [...Hi], r = this.controlOptions.routingLineLayerNodeLabelSpec?.source;
+		let n = [...na], r = this.controlOptions.routingLineLayerNodeLabelSpec?.source;
 		r && n.push(r);
 		let i = this.controlOptions.timeIsochroneLabelLayerSpec?.source;
 		i && n.push(i);
 		let a = this.controlOptions.distanceIsochroneLabelLayerSpec?.source;
-		return a && n.push(a), Gi(e, t, n, this.options.adapterOptions?.prefixId);
+		return a && n.push(a), aa(e, t, n, this.options.adapterOptions?.prefixId);
 	}
 	createSettingsDialog() {
-		this.settingDialog = new Ji(`maplibregl-terradraw-${this.cssPrefix}settings-dialog`, "Settings"), this.settingDialog.create(this.map?.getContainer().parentElement, (e) => {
+		this.settingDialog = new ca(`maplibregl-terradraw-${this.cssPrefix}settings-dialog`, "Settings"), this.settingDialog.create(this.map?.getContainer().parentElement, (e) => {
 			let t = document.createElement("div");
 			t.classList.add("tab-container");
 			let n = document.createElement("div");
@@ -11644,13 +12114,13 @@ var Ea = class extends wa {
 		let e = document.createElement("div"), t = document.createElement("div");
 		t.classList.add("setting-section");
 		let n = document.createElement("label");
-		n.textContent = "Means of Transport", n.classList.add("setting-label"), t.appendChild(n), t.appendChild(this.settingDialog.createSegmentButtons(dr, this.routingCostingModel, (e) => {
+		n.textContent = "Means of Transport", n.classList.add("setting-label"), t.appendChild(n), t.appendChild(this.settingDialog.createSegmentButtons(pr, this.routingCostingModel, (e) => {
 			this.routingCostingModel = e, this.dispatchEvent("setting-changed");
 		})), e.appendChild(t);
 		let r = document.createElement("div");
 		r.classList.add("setting-section");
 		let i = document.createElement("label");
-		return i.textContent = "Distance Unit", i.classList.add("setting-label"), r.appendChild(i), r.appendChild(this.settingDialog.createSegmentButtons(fr, this.routingDistanceUnit, (e) => {
+		return i.textContent = "Distance Unit", i.classList.add("setting-label"), r.appendChild(i), r.appendChild(this.settingDialog.createSegmentButtons(mr, this.routingDistanceUnit, (e) => {
 			this.routingDistanceUnit = e, this.dispatchEvent("setting-changed");
 		})), e.appendChild(r), e;
 	}
@@ -11658,13 +12128,13 @@ var Ea = class extends wa {
 		let e = document.createElement("div"), t = document.createElement("div");
 		t.classList.add("setting-section");
 		let n = document.createElement("label");
-		n.textContent = "Means of Transport (Time)", n.classList.add("setting-label"), t.appendChild(n), t.appendChild(this.settingDialog.createSegmentButtons(dr, this.timeIsochroneCostingModel, (e) => {
+		n.textContent = "Means of Transport (Time)", n.classList.add("setting-label"), t.appendChild(n), t.appendChild(this.settingDialog.createSegmentButtons(pr, this.timeIsochroneCostingModel, (e) => {
 			this.timeIsochroneCostingModel = e, this.dispatchEvent("setting-changed");
 		})), e.appendChild(t);
 		let r = document.createElement("div");
 		r.classList.add("setting-section");
 		let i = document.createElement("label");
-		i.textContent = "Means of Transport (Distance)", i.classList.add("setting-label"), r.appendChild(i), r.appendChild(this.settingDialog.createSegmentButtons(dr, this.distanceIsochroneCostingModel, (e) => {
+		i.textContent = "Means of Transport (Distance)", i.classList.add("setting-label"), r.appendChild(i), r.appendChild(this.settingDialog.createSegmentButtons(pr, this.distanceIsochroneCostingModel, (e) => {
 			this.distanceIsochroneCostingModel = e, this.dispatchEvent("setting-changed");
 		})), e.appendChild(r);
 		let a = document.createElement("div");
@@ -11753,9 +12223,9 @@ var Ea = class extends wa {
 		if (t.type = "button", this.modeButtons[e] = t, e === "settings") {
 			t.classList.add(`maplibregl-terradraw-${this.cssPrefix}add-control`), t.classList.add(`maplibregl-terradraw-${this.cssPrefix}${e}-button`), t.addEventListener("click", this.handleSettingDialog.bind(this));
 			let n = (this.options.keyboardShortcuts ? {
-				...oi,
+				...bi,
 				...this.options.keyboardShortcuts
-			} : oi)?.settings, r = n ? [...n.heldKeys.map((e) => Vi(e)), Vi(n.key)].join(" + ") : void 0;
+			} : bi)?.settings, r = n ? [...n.heldKeys.map((e) => ta(e)), ta(n.key)].join(" + ") : void 0;
 			t.title = r ? `Settings ( ${r} )` : "Settings", super.syncButtonStates(e);
 		} else super.addTerradrawButton(e);
 	}
@@ -11788,7 +12258,7 @@ var Ea = class extends wa {
 		];
 		for (let t of e) t && (this.map.getLayer(t.id) && this.map.removeLayer(t.id), this.map.getSource(t.source) && this.map.removeSource(t.source));
 	}
-	handleStoreChange = Ki(() => {
+	handleStoreChange = oa(() => {
 		if (!this.map || !this.terradraw) return;
 		let e = this.terradraw.getSnapshot();
 		this.setLabelSourceData(this.controlOptions.routingLineLayerNodeLabelSpec, e.filter((e) => e.properties?.mode === "routing" && e.geometry.type === "Point")), this.setLabelSourceData(this.controlOptions.timeIsochroneLabelLayerSpec, e.filter((e) => e.properties?.mode === "time-isochrone" && e.geometry.type === "Polygon")), this.setLabelSourceData(this.controlOptions.distanceIsochroneLabelLayerSpec, e.filter((e) => e.properties?.mode === "distance-isochrone" && e.geometry.type === "Polygon"));
@@ -11814,6 +12284,6 @@ var Ea = class extends wa {
 		this.options.showDeleteConfirmation === !0 ? this.showDeleteConfirmationDialog(n, "Delete Selected Features", "Are you sure you want to delete the selected features?") : n();
 	}
 };
-export { cr as AWS_ELEVATION_TILES, rr as AvailableModes, ir as AvailableValhallaModes, lr as MAPTERHORN_TILES, Ea as MaplibreMeasureControl, wa as MaplibreTerradrawControl, Da as MaplibreValhallaControl, qi as MemoryCache, Ji as ModalDialog, Ca as ModeKeyboardShortcutController, Ar as PARAMETRIC_MODES, Or as SHAPE_STEPS, Ui as TERRADRAW_MEASURE_SOURCE_IDS, Hi as TERRADRAW_SOURCE_IDS, Wi as TERRADRAW_VALHALLA_SOURCE_IDS, Dr as TerraDrawShapeCircleMode, Zr as TerraDrawShapeEllipseMode, Qr as TerraDrawShapeSelectMode, Er as TerraDrawTextMode, xr as TerraDrawValhallaDistanceIsochroneMode, yr as TerraDrawValhallaIsochroneBaseMode, mr as TerraDrawValhallaRoutingMode, br as TerraDrawValhallaTimeIsochroneMode, gr as ValhallaIsochrone, pr as ValhallaRouting, Nr as bearingDegrees, Ri as buildUndoRedoShortcuts, Di as calcArea, Fi as calcDistance, zi as capitalize, Gi as cleanMaplibreStyle, hr as contourTypeOptions, Ci as convertArea, ji as convertDistance, Ii as convertElevation, dr as costingModelOptions, Ki as debounce, Sr as defaultContours, ar as defaultControlOptions, ur as defaultMeasureControlOptions, or as defaultMeasureUnitSymbols, ai as defaultModeKeyboardShortcuts, ni as defaultSubmitButtonStyleOptions, ti as defaultTextAreaStyleOptions, ii as defaultTextAreaTooltipSpanStyleOptions, ri as defaultTextAreaWrapperStyleOptions, Cr as defaultValhallaControlOptions, oi as defaultValhallaModeKeyboardShortcuts, Mr as destination, X as distanceMeters, Rr as formatCenter, Vi as formatShortcutKey, Z as fromLocal, ei as getDefaultModeOptions, Gr as handleCoordinates, Ur as handleRoles, J as isParametricMode, qr as paramsFromFeature, Lr as parseCenter, $r as polygonValidation, Yi as queryElevationByPoint, va as queryElevationFromRasterDEM, Xr as rebuildShapeFeature, Yr as resizeShape, Hr as ringForParams, ya as roundFeatureCoordinates, fr as routingDistanceUnitOptions, Jr as shapeProperties, Pr as toLocal };
+export { ur as AWS_ELEVATION_TILES, ar as AvailableModes, or as AvailableValhallaModes, dr as MAPTERHORN_TILES, Ba as MaplibreMeasureControl, Ra as MaplibreTerradrawControl, Va as MaplibreValhallaControl, sa as MemoryCache, ca as ModalDialog, La as ModeKeyboardShortcutController, Mr as PARAMETRIC_MODES, Ar as SHAPE_STEPS, ra as TERRADRAW_MEASURE_SOURCE_IDS, na as TERRADRAW_SOURCE_IDS, ia as TERRADRAW_VALHALLA_SOURCE_IDS, kr as TerraDrawShapeCircleMode, oi as TerraDrawShapeEllipseMode, ci as TerraDrawShapeSectorMode, fi as TerraDrawShapeSelectMode, di as TerraDrawShapeSensorMode, Or as TerraDrawTextMode, Cr as TerraDrawValhallaDistanceIsochroneMode, xr as TerraDrawValhallaIsochroneBaseMode, gr as TerraDrawValhallaRoutingMode, Sr as TerraDrawValhallaTimeIsochroneMode, vr as ValhallaIsochrone, hr as ValhallaRouting, Jr as arcCoordinates, Gr as arcSweepDegrees, X as bearingDegrees, Qi as buildUndoRedoShortcuts, Vi as calcArea, Yi as calcDistance, $i as capitalize, aa as cleanMaplibreStyle, _r as contourTypeOptions, Li as convertArea, Gi as convertDistance, Xi as convertElevation, pr as costingModelOptions, oa as debounce, wr as defaultContours, sr as defaultControlOptions, fr as defaultMeasureControlOptions, cr as defaultMeasureUnitSymbols, yi as defaultModeKeyboardShortcuts, gi as defaultSubmitButtonStyleOptions, hi as defaultTextAreaStyleOptions, vi as defaultTextAreaTooltipSpanStyleOptions, _i as defaultTextAreaWrapperStyleOptions, Tr as defaultValhallaControlOptions, bi as defaultValhallaModeKeyboardShortcuts, J as destination, Y as distanceMeters, zr as formatCenter, ta as formatShortcutKey, Z as fromLocal, mi as getDefaultModeOptions, Qr as handleCoordinates, Xr as handleRoles, qr as inferArcDirection, Nr as isParametricMode, ni as paramsFromFeature, Br as parseArcDirection, Rr as parseCenter, pi as polygonValidation, la as queryElevationByPoint, Ma as queryElevationFromRasterDEM, ai as rebuildShapeFeature, ii as resizeShape, Yr as ringForParams, Na as roundFeatureCoordinates, mr as routingDistanceUnitOptions, ri as shapeProperties, Fr as toLocal, q as wrapBearing };
 
 //# sourceMappingURL=maplibre-gl-terradraw.es.js.map

@@ -189,6 +189,10 @@ export class TerraDrawShapeEllipseMode extends TerraDrawCircleMode {
 			mode: 'ellipse',
 			center: this.origin,
 			radiusMeters: 0,
+			innerRadiusMeters: 0,
+			startBearing: 0,
+			endBearing: 0,
+			arcDirection: 'clockwise',
 			xSemiAxis: this.xSemiAxis,
 			ySemiAxis: this.ySemiAxis,
 			angle: this.angle

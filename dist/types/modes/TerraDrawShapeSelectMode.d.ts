@@ -17,6 +17,7 @@ export declare class TerraDrawShapeSelectMode extends TerraDrawSelectMode {
     onMouseMove(event: TerraDrawMouseEvent): void;
     private host;
     private modeOf;
+    private usesShapeHandles;
     private featureOf;
     private paramsOf;
     private writeShape;

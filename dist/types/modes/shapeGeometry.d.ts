@@ -1,12 +1,17 @@
 export declare const SHAPE_STEPS = 64;
-export declare const PARAMETRIC_MODES: readonly ["circle", "ellipse", "rectangle", "angled-rectangle"];
+export declare const PARAMETRIC_MODES: readonly ["circle", "ellipse", "rectangle", "angled-rectangle", "sector", "sensor"];
 export type ParametricMode = (typeof PARAMETRIC_MODES)[number];
 export type LngLat = [number, number];
-export type HandleRole = 'center' | 'rim' | 'x' | 'x-neg' | 'y' | 'y-neg' | 'xy' | 'xy-neg' | 'x-neg-y' | 'x-neg-y-neg';
+export type ArcDirection = 'clockwise' | 'anticlockwise';
+export type HandleRole = 'center' | 'rim' | 'x' | 'x-neg' | 'y' | 'y-neg' | 'xy' | 'xy-neg' | 'x-neg-y' | 'x-neg-y-neg' | 'start' | 'end' | 'outer-start' | 'outer-end' | 'inner-start' | 'inner-end';
 export type ShapeParams = {
     mode: ParametricMode;
     center: LngLat;
     radiusMeters: number;
+    innerRadiusMeters: number;
+    startBearing: number;
+    endBearing: number;
+    arcDirection: ArcDirection;
     xSemiAxis: number;
     ySemiAxis: number;
     angle: number;
@@ -19,6 +24,7 @@ type FeatureLike = {
     properties?: Record<string, unknown> | null;
 };
 export declare function isParametricMode(mode: unknown): mode is ParametricMode;
+export declare function wrapBearing(degrees: number): number;
 export declare function destination(lon: number, lat: number, distanceM: number, bearingDeg: number): LngLat;
 export declare function distanceMeters(a: LngLat, b: LngLat): number;
 export declare function bearingDegrees(a: LngLat, b: LngLat): number;
@@ -29,6 +35,10 @@ export declare function toLocal(center: LngLat, point: LngLat, angleDeg: number)
 export declare function fromLocal(center: LngLat, xMeters: number, yMeters: number, angleDeg: number): LngLat;
 export declare function parseCenter(value: unknown): LngLat | null;
 export declare function formatCenter(center: LngLat): string;
+export declare function parseArcDirection(value: unknown): ArcDirection | null;
+export declare function arcSweepDegrees(startBearing: number, endBearing: number, direction: ArcDirection): number;
+export declare function inferArcDirection(startBearing: number, endBearing: number, midBearing: number): ArcDirection;
+export declare function arcCoordinates(center: LngLat, radiusM: number, startBearing: number, endBearing: number, direction: ArcDirection, steps?: number, precision?: number): LngLat[];
 export declare function ringForParams(params: ShapeParams, steps?: number, precision?: number): LngLat[];
 export declare function handleRoles(mode: ParametricMode): HandleRole[];
 export declare function handleCoordinates(params: ShapeParams): LngLat[];
